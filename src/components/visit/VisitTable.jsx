@@ -1,20 +1,38 @@
 import React, { useEffect, useState } from "react";
+import {
+  getVisitByCategory,
+  getGuestById,
+  confirmVisit,
+  updateVisit,
+  deleteGuest,
+} from "../../service/api/api";
 
-// Importing necessary functions from API service
-import { getVisits, getGuestById, confirmVisit, updateVisit, deleteGuest } from "../../service/api/api";
+const fixedCategories = [
+  "Semua",
+  "Kunjungan Dinas",
+  "pelayanan Statistik Terpadu",
+  "Lainnya",
+];
 
 const VisitTable = () => {
+  const [categoryData, setCategoryData] = useState({});
+  const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [visits, setVisits] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch kunjungan berdasarkan kategori
   useEffect(() => {
-    const fetchVisits = async () => {
+    const fetchData = async () => {
       try {
-        const res = await getVisits();
-        const visitsData = res.data;
+        const res = await getVisitByCategory();
+        const categorizedData = res.data;
+        setCategoryData(categorizedData);
 
+        const allVisits = Object.values(categorizedData).flat();
+
+        // Ambil nama tamu untuk setiap kunjungan
         const visitsWithGuest = await Promise.all(
-          visitsData.map(async (visit) => {
+          allVisits.map(async (visit) => {
             try {
               const guestRes = await getGuestById(visit.guest_id);
               return { ...visit, guest_name: guestRes.data.guest_name };
@@ -26,29 +44,50 @@ const VisitTable = () => {
 
         setVisits(visitsWithGuest);
       } catch (error) {
-        console.error("Error fetching visits:", error);
+        console.error("Gagal mengambil data kunjungan:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchVisits();
+    fetchData();
   }, []);
+
+  // Filter berdasarkan kategori terpilih
+  useEffect(() => {
+    const filterByCategory = async () => {
+      if (!categoryData || Object.keys(categoryData).length === 0) return;
+
+      let filteredVisits =
+        selectedCategory === "Semua"
+          ? Object.values(categoryData).flat()
+          : categoryData[selectedCategory] || [];
+
+      const visitsWithGuest = await Promise.all(
+        filteredVisits.map(async (visit) => {
+          try {
+            const guestRes = await getGuestById(visit.guest_id);
+            return { ...visit, guest_name: guestRes.data.guest_name };
+          } catch {
+            return { ...visit, guest_name: "Tamu Tidak Diketahui" };
+          }
+        })
+      );
+
+      setVisits(visitsWithGuest);
+    };
+
+    filterByCategory();
+  }, [selectedCategory, categoryData]);
 
   const handleToggleMark = async (visit) => {
     try {
       const token = localStorage.getItem("token");
       await confirmVisit(visit.visit_id, token);
-  
-      const newMark = visit.mark === "hadir" ? "tidak hadir" : "hadir";
 
-      // Update to backend
-      await updateVisit(
-        visit.visit_id,
-        { mark: newMark },
-        token
-      );
-  
+      const newMark = visit.mark === "hadir" ? "tidak hadir" : "hadir";
+      await updateVisit(visit.visit_id, { mark: newMark }, token);
+
       setVisits((prev) =>
         prev.map((v) =>
           v.visit_id === visit.visit_id ? { ...v, mark: newMark } : v
@@ -63,12 +102,11 @@ const VisitTable = () => {
   const handleDeleteGuest = async (guest_id) => {
     const confirm = window.confirm("Yakin ingin menghapus tamu ini?");
     if (!confirm) return;
-  
+
     try {
       const token = localStorage.getItem("token");
       await deleteGuest(guest_id, token);
-  
-      // Refresh the visits list
+
       setVisits((prev) => prev.filter((v) => v.guest_id !== guest_id));
     } catch (error) {
       console.error("Gagal menghapus tamu:", error);
@@ -79,6 +117,31 @@ const VisitTable = () => {
   return (
     <div>
       <h2>Daftar Kunjungan</h2>
+
+      {/* Tombol kategori */}
+      <div style={{ marginBottom: "20px" }}>
+        {fixedCategories.map((category) => (
+          <button
+            key={category}
+            onClick={() => setSelectedCategory(category)}
+            style={{
+              marginRight: "10px",
+              padding: "8px 16px",
+              backgroundColor:
+                selectedCategory === category ? "#007bff" : "#ccc",
+              color: "white",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+              textTransform: "capitalize",
+            }}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+
+      {/* Tabel kunjungan */}
       {loading ? (
         <p>Loading...</p>
       ) : (
@@ -96,34 +159,42 @@ const VisitTable = () => {
             </tr>
           </thead>
           <tbody>
-            {visits.map((v) => {
-              const dateObj = new Date(v.timestamp);
-              const tanggal = dateObj.toLocaleDateString("id-ID");
-              const waktu = dateObj.toLocaleTimeString("id-ID");
+            {visits.length === 0 ? (
+              <tr>
+                <td colSpan="8" align="center">
+                  Tidak ada data kunjungan.
+                </td>
+              </tr>
+            ) : (
+              visits.map((v) => {
+                const dateObj = new Date(v.timestamp);
+                const tanggal = dateObj.toLocaleDateString("id-ID");
+                const waktu = dateObj.toLocaleTimeString("id-ID");
 
-              return (
-                <tr key={v.visit_id}>
-                  <td>{v.visit_id}</td>
-                  <td>{v.guest_name}</td>
-                  <td>{v.purpose}</td>
-                  <td>{v.target_service}</td>
-                  <td>
-                    {tanggal} <br /> {waktu}
-                  </td>
-                  <td>{v.queue_number}</td>
-                  <td>{v.mark}</td>
-                  <td>
-                    <button onClick={() => handleToggleMark(v)}>
-                      Tandai {v.mark === "hadir" ? "Tidak Hadir" : "Hadir"}
-                    </button>
-                    <br />
-                    <button onClick={() => handleDeleteGuest(v.guest_id)}>
-                      Hapus Tamu
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+                return (
+                  <tr key={v.visit_id}>
+                    <td>{v.visit_id}</td>
+                    <td>{v.guest_name}</td>
+                    <td>{v.purpose}</td>
+                    <td>{v.target_service}</td>
+                    <td>
+                      {tanggal} <br /> {waktu}
+                    </td>
+                    <td>{v.queue_number ?? "-"}</td>
+                    <td>{v.mark}</td>
+                    <td>
+                      <button onClick={() => handleToggleMark(v)}>
+                        Tandai {v.mark === "hadir" ? "Tidak Hadir" : "Hadir"}
+                      </button>
+                      <br />
+                      <button onClick={() => handleDeleteGuest(v.guest_id)}>
+                        Hapus Tamu
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
       )}
