@@ -13,6 +13,7 @@ const API = axios.create({
 export default API;
 
 // API for Guest
+export const getAllGuests = () => API.get("/guest/allguest");
 export const createGuest = (data) => API.post("/guest/form", data);
 export const getGuestById = (id) => API.get(`/guest/${id}`);
 export const deleteGuest = (guest_id, token) => API.delete(`/guest/${guest_id}`, {
@@ -36,6 +37,8 @@ export const confirmVisit = (visit_id, token) => API.put(`/cs/confirm/${visit_id
 export const getCSLogs = (token) => API.get("/cs/actlogs", {
     headers: { Authorization: `Bearer ${token}` },
   });
+export const resetDatabase = (token) =>
+  API.post("/cs/resetdb", {}, { headers: { Authorization: `Bearer ${token}` } });
 
 // API for Export
 export const exportAll = () => API.get("/export", { responseType: "blob" });
