@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Importing function from API service
+// Importing from service & components
 import { getCSLogs } from "../../service/api/api";
-
-// Importing the ExportLogButton component
 import ExportLogButton from "../../components/export/ExportLogButton";
 
 const CSLogs = () => {
