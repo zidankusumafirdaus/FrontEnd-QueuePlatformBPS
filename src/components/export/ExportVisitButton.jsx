@@ -1,6 +1,6 @@
 import React from "react";
 
-// Importing the exportVisits function from the API service
+// Importing from service
 import { exportVisits } from "../../service/api/api";
 
 const ExportVisitButton = () => {

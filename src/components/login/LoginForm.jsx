@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Importing the login function from the API service
+// Importing from utility & service 
 import { loginCS } from "../../service/api/api";
-
-// Importing utility function to save token
 import { saveToken } from "../../utils/auth";
 
 const LoginForm = () => {

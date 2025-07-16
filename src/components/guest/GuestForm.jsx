@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Importing the createGuest, getGuestById, and getVisits functions from the API service
+// Importing from service
 import { createGuest, getGuestById, getVisits } from "../../service/api/api";
 
 const GuestForm = () => {

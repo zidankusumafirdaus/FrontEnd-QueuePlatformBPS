@@ -1,6 +1,6 @@
 import React from "react";
 
-// Importing the exportGuests function from the API service
+// Importing from service
 import { exportGuests } from "../../service/api/api";
 
 const ExportGuestButton = () => {

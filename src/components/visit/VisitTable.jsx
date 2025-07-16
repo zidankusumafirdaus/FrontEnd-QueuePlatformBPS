@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   getVisitByCategory,
-  getGuestById,
+  getAllGuests,
   confirmVisit,
   updateVisit,
   deleteGuest,
@@ -16,35 +16,41 @@ const fixedCategories = [
 
 const VisitTable = () => {
   const [categoryData, setCategoryData] = useState({});
+  const [guestMap, setGuestMap] = useState({});
   const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [visits, setVisits] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch kunjungan berdasarkan kategori
+  // Fetch semua data (kunjungan dan tamu)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await getVisitByCategory();
-        const categorizedData = res.data;
+        const [visitRes, guestRes] = await Promise.all([
+          getVisitByCategory(),
+          getAllGuests(),
+        ]);
+
+        // Set kategori kunjungan
+        const categorizedData = visitRes.data;
         setCategoryData(categorizedData);
 
-        const allVisits = Object.values(categorizedData).flat();
+        // Buat map tamu (guest_id => guest_name)
+        const guestMap = {};
+        guestRes.data.forEach((g) => {
+          guestMap[g.guest_id] = g.guest_name;
+        });
+        setGuestMap(guestMap);
 
-        // Ambil nama tamu untuk setiap kunjungan
-        const visitsWithGuest = await Promise.all(
-          allVisits.map(async (visit) => {
-            try {
-              const guestRes = await getGuestById(visit.guest_id);
-              return { ...visit, guest_name: guestRes.data.guest_name };
-            } catch {
-              return { ...visit, guest_name: "Tamu Tidak Diketahui" };
-            }
-          })
-        );
+        // Gabungkan kunjungan dengan nama tamu
+        const allVisits = Object.values(categorizedData).flat();
+        const visitsWithGuest = allVisits.map((v) => ({
+          ...v,
+          guest_name: guestMap[v.guest_id] || "Tamu Tidak Diketahui",
+        }));
 
         setVisits(visitsWithGuest);
       } catch (error) {
-        console.error("Gagal mengambil data kunjungan:", error);
+        console.error("Gagal mengambil data:", error);
       } finally {
         setLoading(false);
       }
@@ -53,32 +59,22 @@ const VisitTable = () => {
     fetchData();
   }, []);
 
-  // Filter berdasarkan kategori terpilih
+  // Update kunjungan saat kategori berubah
   useEffect(() => {
-    const filterByCategory = async () => {
-      if (!categoryData || Object.keys(categoryData).length === 0) return;
+    if (!categoryData || Object.keys(categoryData).length === 0) return;
 
-      let filteredVisits =
-        selectedCategory === "Semua"
-          ? Object.values(categoryData).flat()
-          : categoryData[selectedCategory] || [];
+    const filteredVisits =
+      selectedCategory === "Semua"
+        ? Object.values(categoryData).flat()
+        : categoryData[selectedCategory] || [];
 
-      const visitsWithGuest = await Promise.all(
-        filteredVisits.map(async (visit) => {
-          try {
-            const guestRes = await getGuestById(visit.guest_id);
-            return { ...visit, guest_name: guestRes.data.guest_name };
-          } catch {
-            return { ...visit, guest_name: "Tamu Tidak Diketahui" };
-          }
-        })
-      );
+    const visitsWithGuest = filteredVisits.map((v) => ({
+      ...v,
+      guest_name: guestMap[v.guest_id] || "Tamu Tidak Diketahui",
+    }));
 
-      setVisits(visitsWithGuest);
-    };
-
-    filterByCategory();
-  }, [selectedCategory, categoryData]);
+    setVisits(visitsWithGuest);
+  }, [selectedCategory, categoryData, guestMap]);
 
   const handleToggleMark = async (visit) => {
     try {
@@ -118,7 +114,7 @@ const VisitTable = () => {
     <div>
       <h2>Daftar Kunjungan</h2>
 
-      {/* Tombol kategori */}
+      {/* Tombol filter kategori */}
       <div style={{ marginBottom: "20px" }}>
         {fixedCategories.map((category) => (
           <button
