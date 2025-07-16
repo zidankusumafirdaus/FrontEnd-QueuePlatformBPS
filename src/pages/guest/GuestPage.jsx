@@ -1,6 +1,6 @@
 import React from "react";
 
-// Importing the GuestForm component
+// Importing from component
 import GuestForm from "../../components/guest/GuestForm";
 
 const GuestPage = () => {
