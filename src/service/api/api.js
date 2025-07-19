@@ -41,7 +41,6 @@ export const resetDatabase = (token) =>
   API.post("/cs/resetdb", {}, { headers: { Authorization: `Bearer ${token}` } });
 
 // API for Export
-export const exportAll = () => API.get("/export", { responseType: "blob" });
 export const exportGuests = () => API.get("/export/guest", { responseType: "blob" });
 export const exportVisits = () => API.get("/export/visit", { responseType: "blob" });
 export const exportLogs = () => API.get("/export/logs", { responseType: "blob" });
