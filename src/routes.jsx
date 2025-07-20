@@ -10,12 +10,14 @@ import VisitPage from "./pages/cs/GuestVisitPage";
 import LoginPage from "./pages/cs/LoginPage";
 import CSLogs from "./pages/cs/CSLogs";
 import AllGuestPage from "./pages/cs/AllGuestPage";
+import HomePage from "./pages/home/HomePage";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Router>
       <Routes>
-      <Route path="/" element={<Navigate to="/guest" replace />} />
+      <Route path="/" element={<Navigate to="/BPS-BukuTamu" replace />} />
+      <Route path="/BPS-BukuTamu" element={<HomePage />} />
       <Route path="/guest" element={<GuestPage />} />
       <Route path="/visit" element={<VisitPage />} />
       <Route path="/login" element={<LoginPage />} />
