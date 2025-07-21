@@ -84,11 +84,10 @@ const VisitTable = () => {
       const newMark = visit.mark === "hadir" ? "tidak hadir" : "hadir";
       await updateVisit(visit.visit_id, { mark: newMark }, token);
 
-      setVisits((prev) =>
-        prev.map((v) =>
-          v.visit_id === visit.visit_id ? { ...v, mark: newMark } : v
-        )
-      );
+      // Refetch data from backend to ensure consistency
+      const updatedVisitRes = await getVisitByCategory();
+      setCategoryData(updatedVisitRes.data);
+
     } catch (error) {
       alert("Gagal mengonfirmasi kehadiran.");
       console.error(error);
