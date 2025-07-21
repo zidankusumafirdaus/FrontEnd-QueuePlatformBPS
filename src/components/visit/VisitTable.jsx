@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   getVisitByCategory,
   getAllGuests,
-  confirmVisit,
   updateVisit,
-  deleteGuest,
 } from "../../service/api/api";
 
 const fixedCategories = [
@@ -21,7 +19,6 @@ const VisitTable = () => {
   const [visits, setVisits] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch semua data (kunjungan dan tamu)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -59,7 +56,6 @@ const VisitTable = () => {
     fetchData();
   }, []);
 
-  // Update kunjungan saat kategori berubah
   useEffect(() => {
     if (!categoryData || Object.keys(categoryData).length === 0) return;
 
@@ -77,35 +73,37 @@ const VisitTable = () => {
   }, [selectedCategory, categoryData, guestMap]);
 
   const handleToggleMark = async (visit) => {
-    try {
-      const token = localStorage.getItem("token");
-      await confirmVisit(visit.visit_id, token);
+    const token = localStorage.getItem("token");
+    const newMark = visit.mark === "hadir" ? "tidak hadir" : "hadir";
 
-      const newMark = visit.mark === "hadir" ? "tidak hadir" : "hadir";
+    setVisits((prevVisits) =>
+      prevVisits.map((v) =>
+        v.visit_id === visit.visit_id ? { ...v, mark: newMark } : v
+      )
+    );
+
+    setCategoryData((prevData) => {
+      const updatedData = { ...prevData };
+      for (const cat in updatedData) {
+        updatedData[cat] = updatedData[cat].map((v) =>
+          v.visit_id === visit.visit_id ? { ...v, mark: newMark } : v
+        );
+      }
+      return updatedData;
+    });
+
+    try {
       await updateVisit(visit.visit_id, { mark: newMark }, token);
-
-      // Refetch data from backend to ensure consistency
-      const updatedVisitRes = await getVisitByCategory();
-      setCategoryData(updatedVisitRes.data);
-
     } catch (error) {
-      alert("Gagal mengonfirmasi kehadiran.");
+      alert("Gagal memperbarui status kehadiran.");
       console.error(error);
-    }
-  };
 
-  const handleDeleteGuest = async (guest_id) => {
-    const confirm = window.confirm("Yakin ingin menghapus tamu ini?");
-    if (!confirm) return;
-
-    try {
-      const token = localStorage.getItem("token");
-      await deleteGuest(guest_id, token);
-
-      setVisits((prev) => prev.filter((v) => v.guest_id !== guest_id));
-    } catch (error) {
-      console.error("Gagal menghapus tamu:", error);
-      alert("Gagal menghapus tamu.");
+      // Revert optimistic update
+      setVisits((prevVisits) =>
+        prevVisits.map((v) =>
+          v.visit_id === visit.visit_id ? { ...v, mark: visit.mark } : v
+        )
+      );
     }
   };
 
@@ -182,9 +180,6 @@ const VisitTable = () => {
                         Tandai {v.mark === "hadir" ? "Tidak Hadir" : "Hadir"}
                       </button>
                       <br />
-                      <button onClick={() => handleDeleteGuest(v.guest_id)}>
-                        Hapus Tamu
-                      </button>
                     </td>
                   </tr>
                 );
