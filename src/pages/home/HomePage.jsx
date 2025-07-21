@@ -9,15 +9,12 @@ const HomePage = () => {
 
   return (
     <div className="relative w-full overflow-hidden font-poppins" style={{ height: '100vh', maxHeight: '100vh' }}>
-      {/* Background Image */}
       <img
       src={HomeBPS}
       alt="BPS Sidoarjo"
       className="w-full h-full object-cover object-[68%_center] sm:object-center"
       />
 
-
-      {/* Top-right Login Button */}
       <div className="absolute top-4 right-4 pt-8 sm:top-10 sm:right-6">
         <button
           onClick={() => navigate('/login')}
@@ -27,7 +24,6 @@ const HomePage = () => {
         </button>
       </div>
 
-      {/* Footer Overlay */}
       <div className="absolute bottom-0 w-full bg-gradient-to-t from-BiruTerang to-transparent pt-32 sm:pt-48 pb-14 px-6 sm:px-12">
         <div className="text-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
@@ -39,7 +35,6 @@ const HomePage = () => {
             </p>
           </div>
 
-          {/* ✅ Desktop-only button: beside text */}
           <button
             onClick={() => navigate('/guest')}
             className="hidden sm:flex bg-white rounded-full p-3 shadow-md"
@@ -49,7 +44,6 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* ✅ Mobile-only button: bottom-right corner */}
       <button
         onClick={() => navigate('/guest')}
         className="sm:hidden absolute bottom-6 right-6 bg-white rounded-full p-3 shadow-md"
