@@ -1,19 +1,22 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { FaChartBar, FaUsers, FaSignOutAlt, FaRedo, FaTrash } from 'react-icons/fa';
+import { useNavigate, useLocation } from "react-router-dom";
+import { FaChartBar, FaUsers, FaSignOutAlt, FaRedo, FaTrash, FaClipboardList } from 'react-icons/fa';
 
 // Importing from utility, & Components
+import VisitTable from "../../components/visit/VisitTable";
+import ExportVisitButton from "../../components/export/ExportVisitButton";
 import { LogoutPage } from "../../utils/LogoutPage";
 import { ResetQueue } from "../../utils/ResetQueue";
 import { ResetDatabase } from "../../utils/ResetDatabase";
-import VisitTable from "../../components/visit/VisitTable";
-import ExportVisitButton from "../../components/export/ExportVisitButton";
 
 const VisitPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isActive = (path) => location.pathname === path;
 
   return (
     <div className="flex h-screen bg-gray-100">
+      {/* Navigation */}
       <aside className="w-64 bg-gray-800 text-white flex flex-col p-4 shadow-lg">
         <div className="mb-8 text-center">
           <span className="text-3xl font-bold text-white">Admin Panel</span>
@@ -21,20 +24,39 @@ const VisitPage = () => {
 
         <nav className="space-y-4">
           <button
+            onClick={() => navigate("/visit")}
+            className={`
+              w-full text-left py-2 px-4 rounded-md transition-colors duration-200 flex items-center space-x-3
+              ${isActive("/visit") ? "bg-gray-700 text-white font-bold" : "hover:bg-gray-700 text-gray-300"}
+            `}
+          >
+            <FaClipboardList className="text-xl" />
+            <span>Data Kunjungan</span>
+          </button>
+          
+          <button
             onClick={() => navigate("/cslogs")}
-            className="w-full text-left py-2 px-4 rounded-md hover:bg-gray-700 transition-colors duration-200 flex items-center space-x-3"
+            className={`
+              w-full text-left py-2 px-4 rounded-md transition-colors duration-200 flex items-center space-x-3
+              ${isActive("/cslogs") ? "bg-gray-700 text-white font-bold" : "hover:bg-gray-700 text-gray-300"}
+            `}
           >
             <FaChartBar className="text-xl" />
             <span>Lihat Log CS</span>
           </button>
+          
           <button
             onClick={() => navigate("/all-guests")}
-            className="w-full text-left py-2 px-4 rounded-md hover:bg-gray-700 transition-colors duration-200 flex items-center space-x-3"
+            className={`
+              w-full text-left py-2 px-4 rounded-md transition-colors duration-200 flex items-center space-x-3
+              ${isActive("/all-guests") ? "bg-gray-700 text-white font-bold" : "hover:bg-gray-700 text-gray-300"}
+            `}
           >
             <FaUsers className="text-xl" />
             <span>Lihat Semua Tamu</span>
           </button>
         </nav>
+        
         <div className="mt-auto pt-4 border-t border-gray-700">
           <button
             onClick={() => LogoutPage(navigate)}
@@ -46,6 +68,7 @@ const VisitPage = () => {
         </div>
       </aside>
 
+      {/* Main Content */}
       <main className="flex-1 overflow-auto p-8">
         <h1 className="text-4xl font-bold mb-6 text-gray-800">Data Kunjungan</h1>
 
@@ -54,22 +77,22 @@ const VisitPage = () => {
           <div className="flex space-x-4 mb-6">
             <button
               onClick={ResetQueue}
-              className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200 text-lg flex items-center space-x-2"
+              className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200 text-lg"
             >
-              <FaRedo className="text-lg" />
-              <span>Reset Antrian</span>
+              <FaRedo className="text-lg inline-block mr-2" />
+              Reset Antrian
             </button>
             <button
               onClick={ResetDatabase}
-              className="px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 text-lg flex items-center space-x-2"
+              className="px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 text-lg"
             >
-              <FaTrash className="text-lg" />
-              <span>Hapus Semua Data Visit</span>
+              <FaTrash className="text-lg inline-block mr-2" />
+              Hapus Semua Data Visit
             </button>
           </div>
 
           <div className="mt-6">
-            <h3 className="text-xl font-semibold mb-3 text-gray-700">Export Data</h3>
+            <h3>Export Data</h3>
             <ExportVisitButton />
           </div>
         </section>
