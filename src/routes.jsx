@@ -1,6 +1,7 @@
 import './styles/index.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import ProtectedRoute from './utils/ProtectRoute';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 // Importing pages
@@ -16,14 +17,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Router>
       <Routes>
-      <Route path="/" element={<Navigate to="/BPS-BukuTamu" replace />} />
-      <Route path="/BPS-BukuTamu" element={<HomePage />} />
-      <Route path="/guest" element={<GuestPage />} />
-      <Route path="/visit" element={<VisitPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/queue-number" element={<QueueNumber />} />
-      <Route path="/cslogs" element={<CSLogs />} />
-      <Route path="/all-guests" element={<AllGuestPage />} />
+        <Route path="/" element={<Navigate to="/BPS-BukuTamu" replace />} />
+        <Route path="/BPS-BukuTamu" element={<HomePage />} />
+        <Route path="/guest" element={<GuestPage />} />
+        <Route path="/queue-number" element={<QueueNumber />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/visit" element={<ProtectedRoute><VisitPage /></ProtectedRoute>} />
+        <Route path="/cslogs" element={ <ProtectedRoute> <CSLogs /> </ProtectedRoute>} />
+        <Route path="/all-guests" element={ <ProtectedRoute> <AllGuestPage /> </ProtectedRoute>} />
       </Routes>
     </Router>
   </React.StrictMode>

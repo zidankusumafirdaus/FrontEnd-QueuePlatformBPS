@@ -1,4 +1,5 @@
 import axios from "axios";
+import { logout } from "../../utils/auth";
 
 
 // baseURL without BackEnd API, because already proxy in vite.config.js
@@ -44,3 +45,12 @@ export const resetDatabase = (token) =>
 export const exportGuests = () => API.get("/export/guest", { responseType: "blob" });
 export const exportVisits = () => API.get("/export/visit", { responseType: "blob" });
 export const exportLogs = () => API.get("/export/logs", { responseType: "blob" });
+
+API.interceptors.response.use( (response) => response, (error) => {
+    if (error.response?.status === 401) {
+      logout();
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  }
+);
