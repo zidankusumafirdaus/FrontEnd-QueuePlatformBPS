@@ -1,4 +1,5 @@
 import React from "react";
+import { Download } from "lucide-react";
 
 // Importing from service
 import { exportLogs } from "../../service/api/api";
@@ -32,14 +33,14 @@ const ExportLogButton = () => {
     <button
       onClick={downloadLogFile}
       className="
-        bg-indigo-600 hover:bg-indigo-700 text-white
-        font-bold py-3 px-6 rounded-lg
+        bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg
         shadow-md hover:shadow-lg
         transition-all duration-300 ease-in-out
-        focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75
-        text-lg
+        focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75
+        text-lg flex items-center gap-2
       "
     >
+      <Download className="w-5 h-5" />
       Export Log
     </button>
   );

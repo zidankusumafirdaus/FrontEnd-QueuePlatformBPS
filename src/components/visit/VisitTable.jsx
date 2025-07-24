@@ -8,7 +8,7 @@ import {
 const fixedCategories = [
   "Semua",
   "Kunjungan Dinas",
-  "pelayanan Statistik Terpadu",
+  "Pelayanan Statistik Terpadu",
   "Lainnya",
 ];
 
@@ -19,6 +19,7 @@ const VisitTable = () => {
   const [visits, setVisits] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch data kunjungan & tamu
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,10 +38,12 @@ const VisitTable = () => {
         setGuestMap(guestMap);
 
         const allVisits = Object.values(categorizedData).flat();
-        const visitsWithGuest = allVisits.map((v) => ({
-          ...v,
-          guest_name: guestMap[v.guest_id] || "Tamu Tidak Diketahui",
-        }));
+        const visitsWithGuest = allVisits
+          .map((v) => ({
+            ...v,
+            guest_name: guestMap[v.guest_id] || "Tamu Tidak Diketahui",
+          }))
+          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // sort terbaru
 
         setVisits(visitsWithGuest);
       } catch (error) {
@@ -53,25 +56,33 @@ const VisitTable = () => {
     fetchData();
   }, []);
 
+  // Filter berdasarkan kategori
   useEffect(() => {
     if (!categoryData || Object.keys(categoryData).length === 0) return;
+
+    // ✅ Normalisasi key agar cocok meski kapitalisasi berbeda
+    const normalizedKey = Object.keys(categoryData).find(
+      (key) => key.toLowerCase() === selectedCategory.toLowerCase()
+    );
 
     const filteredVisits =
       selectedCategory === "Semua"
         ? Object.values(categoryData).flat()
-        : categoryData[selectedCategory] || [];
+        : categoryData[normalizedKey] || [];
 
-    const visitsWithGuest = filteredVisits.map((v) => ({
-      ...v,
-      guest_name: guestMap[v.guest_id] || "Tamu Tidak Diketahui",
-    }));
+    const visitsWithGuest = filteredVisits
+      .map((v) => ({
+        ...v,
+        guest_name: guestMap[v.guest_id] || "Tamu Tidak Diketahui",
+      }))
+      .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
     setVisits(visitsWithGuest);
   }, [selectedCategory, categoryData, guestMap]);
 
   const handleToggleMark = async (visit) => {
     const token = localStorage.getItem("token");
-    const newMark = visit.mark === "hadir" ? "tidak hadir" : "hadir";
+    const newMark = "hadir";
 
     setVisits((prevVisits) =>
       prevVisits.map((v) =>
@@ -93,13 +104,12 @@ const VisitTable = () => {
       await updateVisit(visit.visit_id, { mark: newMark }, token);
     } catch (error) {
       console.error(error);
-
+      // rollback jika gagal
       setVisits((prevVisits) =>
         prevVisits.map((v) =>
           v.visit_id === visit.visit_id ? { ...v, mark: visit.mark } : v
         )
       );
-
       setCategoryData((prevData) => {
         const revertedData = { ...prevData };
         for (const cat in revertedData) {
@@ -113,10 +123,7 @@ const VisitTable = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold mb-6 text-gray-800">Daftar Kunjungan</h2>
-
-      {/* Tombol filter kategori */}
+    <div>
       <div className="mb-6 flex flex-wrap gap-3">
         {fixedCategories.map((category) => (
           <button
@@ -152,10 +159,10 @@ const VisitTable = () => {
                   Nama Tamu
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Keperluan
+                  Tujuan
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Tujuan
+                  Catatan
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Waktu
@@ -209,10 +216,10 @@ const VisitTable = () => {
                         {v.guest_name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {v.purpose}
+                        {v.target_service}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {v.target_service}
+                        {v.purpose}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {tanggal} <br /> {waktu}
@@ -220,23 +227,23 @@ const VisitTable = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {v.queue_number ?? "-"}
                       </td>
-                      <td className={`px-6 py-4 whitespace-nowrap text-sm ${statusColorClass}`}>
+                      <td
+                        className={`px-6 py-4 whitespace-nowrap text-sm ${statusColorClass}`}
+                      >
                         {v.mark.charAt(0).toUpperCase() + v.mark.slice(1)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button
-                          onClick={() => handleToggleMark(v)}
-                          className={`
-                            px-4 py-2 rounded-md text-white text-sm transition-colors duration-200
-                            ${
-                              v.mark === "hadir"
-                                ? "bg-red-500 hover:bg-red-600"
-                                : "bg-green-500 hover:bg-green-600"
-                            }
-                          `}
-                        >
-                          Tandai {v.mark === "hadir" ? "Tidak Hadir" : "Hadir"}
-                        </button>
+                        {v.mark === "hadir" ? null : (
+                          <button
+                            onClick={() => handleToggleMark(v)}
+                            className={`
+                              px-4 py-2 rounded-md text-white text-sm transition-colors duration-200
+                              bg-green-500 hover:bg-green-600
+                            `}
+                          >
+                            Tandai Hadir
+                          </button>
+                        )}
                       </td>
                     </tr>
                   );
