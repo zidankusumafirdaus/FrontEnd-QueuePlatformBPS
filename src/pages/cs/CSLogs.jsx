@@ -33,17 +33,15 @@ const CSLogs = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Sidebar Navigation */}
+      {/* Navigation */}
       <aside className="w-64 bg-gray-800 text-white flex flex-col p-4 shadow-lg">
-        {/* Dashboard Title / Logo placeholder */}
-        <div className="mb-8 text-center">
+        <div className="mb-8 pt-3 text-center">
           <span className="text-3xl font-bold text-white">Admin Panel</span>
         </div>
 
         <nav className="space-y-4">
-          {/* Navigasi untuk halaman VisitPage (Data Kunjungan) */}
           <button
-            onClick={() => navigate("/visit")} // Asumsi path untuk VisitPage adalah /visits
+            onClick={() => navigate("/visit")}
             className={`
               w-full text-left py-2 px-4 rounded-md transition-colors duration-200 flex items-center space-x-3
               ${isActive("/visit") ? "bg-gray-700 text-white font-bold" : "hover:bg-gray-700 text-gray-300"}
@@ -52,20 +50,7 @@ const CSLogs = () => {
             <FaClipboardList className="text-xl" />
             <span>Data Kunjungan</span>
           </button>
-
-          {/* Navigasi untuk halaman CS Logs */}
-          <button
-            onClick={() => navigate("/cslogs")}
-            className={`
-              w-full text-left py-2 px-4 rounded-md transition-colors duration-200 flex items-center space-x-3
-              ${isActive("/cslogs") ? "bg-gray-700 text-white font-bold" : "hover:bg-gray-700 text-gray-300"}
-            `}
-          >
-            <FaChartBar className="text-xl" />
-            <span>Lihat Log CS</span>
-          </button>
-
-          {/* Navigasi untuk halaman All Guests */}
+          
           <button
             onClick={() => navigate("/all-guests")}
             className={`
@@ -74,11 +59,21 @@ const CSLogs = () => {
             `}
           >
             <FaUsers className="text-xl" />
-            <span>Lihat Semua Tamu</span>
+            <span>Semua Tamu</span>
+          </button>
+
+          <button
+            onClick={() => navigate("/cslogs")}
+            className={`
+              w-full text-left py-2 px-4 rounded-md transition-colors duration-200 flex items-center space-x-3
+              ${isActive("/cslogs") ? "bg-gray-700 text-white font-bold" : "hover:bg-gray-700 text-gray-300"}
+            `}
+          >
+            <FaChartBar className="text-xl" />
+            <span>Log CS</span>
           </button>
         </nav>
 
-        {/* Logout Button */}
         <div className="mt-auto pt-4 border-t border-gray-700">
           <button
             onClick={() => LogoutPage(navigate)}
@@ -90,23 +85,16 @@ const CSLogs = () => {
         </div>
       </aside>
 
-      {/* Main Content Area */}
+      {/* Main Content */}
       <main className="flex-1 overflow-auto p-8">
-        {/* Konten Log Aktivitas Customer Service */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h1 className="text-3xl font-bold mb-6 text-gray-800">Log Aktivitas Customer Service</h1>
-
-          <div className="mb-6 flex space-x-4">
-            {/* Tombol kembali tidak lagi dibutuhkan jika ada navigasi sidebar */}
-            {/* <button
-              onClick={() => navigate("/visit")}
-              className="px-6 py-3 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors duration-200 text-lg"
-            >
-              Kembali
-            </button> */}
+        <h1 className="text-4xl font-bold mb-6 text-gray-800">Log Aktivitas Customer Service</h1>
+        <section className="bg-white p-6 rounded-lg shadow-md mb-8">
+          <div className="flex space-x-4">
             <ExportLogButton />
           </div>
+        </section>
 
+        <div className="bg-white p-6 rounded-lg shadow-md">
           {loading ? (
             <div className="text-center py-10">
               <p className="text-gray-600 text-lg">Memuat data log...</p>
@@ -116,7 +104,7 @@ const CSLogs = () => {
               Tidak ada data log aktivitas.
             </div>
           ) : (
-            <div className="overflow-x-auto"> {/* Untuk responsivitas tabel */}
+            <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200 shadow-sm rounded-lg overflow-hidden">
                 <thead className="bg-gray-50">
                   <tr>
@@ -160,7 +148,7 @@ const CSLogs = () => {
                       hour: '2-digit',
                       minute: '2-digit',
                       second: '2-digit',
-                      hour12: false // Force 24-hour format
+                      hour12: false
                     });
 
                     return (

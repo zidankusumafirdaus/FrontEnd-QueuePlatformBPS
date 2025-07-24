@@ -35,15 +35,13 @@ const GuestListPage = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Sidebar Navigation */}
+      {/* Navigation */}
       <aside className="w-64 bg-gray-800 text-white flex flex-col p-4 shadow-lg">
-        {/* Dashboard Title / Logo placeholder */}
-        <div className="mb-8 text-center">
+        <div className="mb-8 pt-3 text-center">
           <span className="text-3xl font-bold text-white">Admin Panel</span>
         </div>
 
         <nav className="space-y-4">
-          {/* Navigasi untuk halaman VisitPage (Data Kunjungan) */}
           <button
             onClick={() => navigate("/visit")}
             className={`
@@ -54,20 +52,7 @@ const GuestListPage = () => {
             <FaClipboardList className="text-xl" />
             <span>Data Kunjungan</span>
           </button>
-          
-          {/* Navigasi untuk halaman CS Logs */}
-          <button
-            onClick={() => navigate("/cslogs")}
-            className={`
-              w-full text-left py-2 px-4 rounded-md transition-colors duration-200 flex items-center space-x-3
-              ${isActive("/cslogs") ? "bg-gray-700 text-white font-bold" : "hover:bg-gray-700 text-gray-300"}
-            `}
-          >
-            <FaChartBar className="text-xl" />
-            <span>Lihat Log CS</span>
-          </button>
-          
-          {/* Navigasi untuk halaman All Guests */}
+
           <button
             onClick={() => navigate("/all-guests")}
             className={`
@@ -76,11 +61,21 @@ const GuestListPage = () => {
             `}
           >
             <FaUsers className="text-xl" />
-            <span>Lihat Semua Tamu</span>
+            <span>Semua Tamu</span>
+          </button>
+
+          <button
+            onClick={() => navigate("/cslogs")}
+            className={`
+              w-full text-left py-2 px-4 rounded-md transition-colors duration-200 flex items-center space-x-3
+              ${isActive("/cslogs") ? "bg-gray-700 text-white font-bold" : "hover:bg-gray-700 text-gray-300"}
+            `}
+          >
+            <FaChartBar className="text-xl" />
+            <span>Log CS</span>
           </button>
         </nav>
         
-        {/* Logout Button */}
         <div className="mt-auto pt-4 border-t border-gray-700">
           <button
             onClick={() => LogoutPage(navigate)}
@@ -92,8 +87,15 @@ const GuestListPage = () => {
         </div>
       </aside>
 
-      {/* Main Content Area */}
+      {/* Main Content */}
       <main className="flex-1 overflow-auto p-8">
+        <h1 className="text-4xl font-bold mb-6 text-gray-800">Data Semua Tamu</h1>
+        <section className="bg-white p-6 rounded-lg shadow-md mb-8">
+          <div className="flex space-x-4">
+            <ExportGuestButton />
+          </div>
+        </section>
+
         {loading ? (
           <div className="flex justify-center items-center h-full py-10">
             <p className="text-gray-600 text-lg">Memuat data tamu...</p>
@@ -104,12 +106,6 @@ const GuestListPage = () => {
           </div>
         ) : (
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h1 className="text-3xl font-bold mb-6 text-gray-800">Daftar Tamu</h1>
-
-            <div className="mb-6">
-              <ExportGuestButton />
-            </div>
-
             <div className="overflow-x-auto">
               {guests.length === 0 ? (
                 <div className="text-center py-8 text-gray-500 text-base">
@@ -153,7 +149,7 @@ const GuestListPage = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{guest.gender}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{guest.identity_type}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{guest.identity_number}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{guest.agency}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{guest.institution}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{guest.phone}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <button
