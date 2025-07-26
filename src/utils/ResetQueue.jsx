@@ -1,17 +1,14 @@
-// Importing from Services
 import { resetQueue } from "../service/api/api";
+import { toast } from "react-toastify";
 
 export const ResetQueue = async () => {
-    const confirmReset = window.confirm("Yakin ingin mereset nomor antrian?");
-    if (!confirmReset) return;
-
-    try {
-        const token = localStorage.getItem("token");
-        await resetQueue(token);
-        alert("Nomor antrian berhasil direset.");
-        window.location.reload();
-    } catch (error) {
-        console.error("Gagal mereset antrian:", error);
-        alert("Gagal mereset antrian.");
-    }
+  try {
+    const token = localStorage.getItem("token");
+    await resetQueue(token);
+    toast.success("Nomor antrian berhasil direset!");
+    setTimeout(() => window.location.reload(), 2000);
+  } catch (error) {
+    console.error("Gagal mereset antrian:", error);
+    toast.error("Gagal mereset antrian.");
+  }
 };

@@ -1,19 +1,14 @@
-// Importing from Services
 import { resetDatabase } from "../service/api/api";
+import { toast } from "react-toastify";
 
 export const ResetDatabase = async () => {
-    const confirmReset = window.confirm(
-        "Yakin ingin menghapus SEMUA data tamu dan kunjungan? Tindakan ini tidak dapat dibatalkan!"
-    );
-    if (!confirmReset) return;
-
-    try {
-        const token = localStorage.getItem("token");
-        await resetDatabase(token);
-        alert("Semua data tamu dan kunjungan berhasil dihapus.");
-        window.location.reload();
-    } catch (error) {
-        console.error("Gagal menghapus data:", error);
-        alert("Gagal menghapus data.");
-    }
+  try {
+    const token = localStorage.getItem("token");
+    await resetDatabase(token);
+    toast.success("Semua data berhasil dihapus!");
+    setTimeout(() => window.location.reload(), 2000);
+  } catch (error) {
+    console.error("Gagal menghapus data:", error);
+    toast.error("Gagal menghapus data.");
+  }
 };
