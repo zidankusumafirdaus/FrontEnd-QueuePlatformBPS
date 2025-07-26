@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {
-  getVisitByCategory,
-  getAllGuests,
-  updateVisit,
-} from "../../service/api/api";
+import { getVisitByCategory, getAllGuests, updateVisit } from "../../service/api/api";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const fixedCategories = [
   "Semua",
@@ -43,7 +41,7 @@ const VisitTable = () => {
             ...v,
             guest_name: guestMap[v.guest_id] || "Tamu Tidak Diketahui",
           }))
-          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // sort terbaru
+          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
         setVisits(visitsWithGuest);
       } catch (error) {
@@ -60,7 +58,6 @@ const VisitTable = () => {
   useEffect(() => {
     if (!categoryData || Object.keys(categoryData).length === 0) return;
 
-    // ✅ Normalisasi key agar cocok meski kapitalisasi berbeda
     const normalizedKey = Object.keys(categoryData).find(
       (key) => key.toLowerCase() === selectedCategory.toLowerCase()
     );
@@ -102,9 +99,12 @@ const VisitTable = () => {
 
     try {
       await updateVisit(visit.visit_id, { mark: newMark }, token);
+      toast.success(`Tamu "${visit.guest_name}" telah ditandai hadir.`);
     } catch (error) {
       console.error(error);
-      // rollback jika gagal
+      toast.error(`Gagal menandai kehadiran tamu "${visit.guest_name}".`);
+
+      // rollback
       setVisits((prevVisits) =>
         prevVisits.map((v) =>
           v.visit_id === visit.visit_id ? { ...v, mark: visit.mark } : v
@@ -253,6 +253,9 @@ const VisitTable = () => {
           </table>
         </div>
       )}
+
+      {/* Toast container */}
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 };

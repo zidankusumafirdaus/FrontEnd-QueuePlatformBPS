@@ -18,7 +18,6 @@ const LoginForm = () => {
     try {
       const res = await loginCS(form);
       saveToken(res.data.token);
-      alert("Login berhasil!");
       navigate("/visit");
     } catch (err) {
       alert("Login gagal: " + (err.response?.data?.message || err.message));
