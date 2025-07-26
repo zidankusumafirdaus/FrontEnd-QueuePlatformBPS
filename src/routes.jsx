@@ -22,9 +22,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/guest" element={<GuestPage />} />
         <Route path="/queue-number" element={<QueueNumber />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/visit" element={<ProtectedRoute><VisitPage /></ProtectedRoute>} />
-        <Route path="/cslogs" element={ <ProtectedRoute> <CSLogs /> </ProtectedRoute>} />
-        <Route path="/all-guests" element={ <ProtectedRoute> <AllGuestPage /> </ProtectedRoute>} />
+        <Route path="/visit" element={<ProtectedRoute> <VisitPage /> </ProtectedRoute>} />
+        <Route path="/cslogs" element={<ProtectedRoute> <CSLogs /> </ProtectedRoute>} />
+        <Route path="/all-guests" element={<ProtectedRoute> <AllGuestPage /> </ProtectedRoute>} />
       </Routes>
     </Router>
   </React.StrictMode>
