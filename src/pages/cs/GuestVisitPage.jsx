@@ -1,18 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { FaChartBar, FaUsers, FaSignOutAlt, FaRedo, FaTrash, FaClipboardList } from 'react-icons/fa';
+import { FaChartBar, FaUsers, FaSignOutAlt, FaRedo, FaTrash, FaClipboardList, } from "react-icons/fa";
 
-// Importing from utility, & Components
-import VisitTable from "../../components/visit/VisitTable";
-import ExportVisitButton from "../../components/export/ExportVisitButton";
 import { LogoutPage } from "../../utils/LogoutPage";
 import { ResetQueue } from "../../utils/ResetQueue";
 import { ResetDatabase } from "../../utils/ResetDatabase";
+import VisitTable from "../../components/visit/VisitTable";
+import ExportVisitButton from "../../components/export/ExportVisitButton";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const VisitPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isActive = (path) => location.pathname === path;
+
+  // State untuk modal konfirmasi
+  const [showResetDatabaseModal, setShowResetDatabaseModal] = useState(false);
+  const [showResetQueueModal, setShowResetQueueModal] = useState(false);
+
+  const handleConfirmResetDatabase = () => {
+    setShowResetDatabaseModal(false);
+    ResetDatabase();
+  };
+
+  const handleConfirmResetQueue = () => {
+    setShowResetQueueModal(false);
+    ResetQueue();
+  };
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -27,36 +43,48 @@ const VisitPage = () => {
             onClick={() => navigate("/visit")}
             className={`
               w-full text-left py-2 px-4 rounded-md transition-colors duration-200 flex items-center space-x-3
-              ${isActive("/visit") ? "bg-gray-700 text-white font-bold" : "hover:bg-gray-700 text-gray-300"}
+              ${
+                isActive("/visit")
+                  ? "bg-gray-700 text-white font-bold"
+                  : "hover:bg-gray-700 text-gray-300"
+              }
             `}
           >
             <FaClipboardList className="text-xl" />
             <span>Data Kunjungan</span>
           </button>
-                    
+
           <button
             onClick={() => navigate("/all-guests")}
             className={`
               w-full text-left py-2 px-4 rounded-md transition-colors duration-200 flex items-center space-x-3
-              ${isActive("/all-guests") ? "bg-gray-700 text-white font-bold" : "hover:bg-gray-700 text-gray-300"}
+              ${
+                isActive("/all-guests")
+                  ? "bg-gray-700 text-white font-bold"
+                  : "hover:bg-gray-700 text-gray-300"
+              }
             `}
           >
             <FaUsers className="text-xl" />
             <span>Semua Tamu</span>
           </button>
-          
+
           <button
             onClick={() => navigate("/cslogs")}
             className={`
               w-full text-left py-2 px-4 rounded-md transition-colors duration-200 flex items-center space-x-3
-              ${isActive("/cslogs") ? "bg-gray-700 text-white font-bold" : "hover:bg-gray-700 text-gray-300"}
+              ${
+                isActive("/cslogs")
+                  ? "bg-gray-700 text-white font-bold"
+                  : "hover:bg-gray-700 text-gray-300"
+              }
             `}
           >
             <FaChartBar className="text-xl" />
             <span>Log CS</span>
           </button>
         </nav>
-        
+
         <div className="mt-auto pt-4 border-t border-gray-700">
           <button
             onClick={() => LogoutPage(navigate)}
@@ -75,19 +103,21 @@ const VisitPage = () => {
         <section className="bg-white p-6 rounded-lg shadow-md mb-8">
           <div className="flex space-x-4">
             <button
-              onClick={ResetQueue}
+              onClick={() => setShowResetQueueModal(true)}
               className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200 text-lg"
             >
               <FaRedo className="text-lg inline-block mr-2" />
               Reset Antrian
             </button>
+
             <button
-              onClick={ResetDatabase}
+              onClick={() => setShowResetDatabaseModal(true)}
               className="px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 text-lg"
             >
               <FaTrash className="text-lg inline-block mr-2" />
               Hapus Semua Antrian
             </button>
+
             <ExportVisitButton />
           </div>
         </section>
@@ -95,6 +125,62 @@ const VisitPage = () => {
         <section className="bg-white p-6 rounded-lg shadow-md">
           <VisitTable />
         </section>
+
+        {/* Toast notification */}
+        <ToastContainer position="top-right" autoClose={3000} />
+
+        {/* Modal Reset Database */}
+        {showResetDatabaseModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white rounded-lg p-6 shadow-lg w-full max-w-md">
+              <h2 className="text-xl font-bold mb-4 text-gray-800">Konfirmasi</h2>
+              <p className="mb-6 text-gray-600">
+                Yakin ingin menghapus <strong>semua</strong> data kunjungan?
+                Tindakan ini <strong>tidak dapat dibatalkan!</strong>
+              </p>
+              <div className="flex justify-end space-x-4">
+                <button
+                  onClick={() => setShowResetDatabaseModal(false)}
+                  className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded"
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={handleConfirmResetDatabase}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded"
+                >
+                  Hapus
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Modal Reset Queue */}
+        {showResetQueueModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white rounded-lg p-6 shadow-lg w-full max-w-md">
+              <h2 className="text-xl font-bold mb-4 text-gray-800">Konfirmasi</h2>
+              <p className="mb-6 text-gray-600">
+                Yakin ingin mereset nomor antrian saat ini?
+              </p>
+              <div className="flex justify-end space-x-4">
+                <button
+                  onClick={() => setShowResetQueueModal(false)}
+                  className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded"
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={handleConfirmResetQueue}
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
