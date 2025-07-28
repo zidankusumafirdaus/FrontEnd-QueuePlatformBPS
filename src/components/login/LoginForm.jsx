@@ -8,6 +8,7 @@ import logoPST from "../../assets/logoPST.png";
 
 const LoginForm = () => {
   const [form, setForm] = useState({ admin: "", password: "" });
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) =>
@@ -15,17 +16,28 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // Set loading state to true
     try {
       const res = await loginCS(form);
       saveToken(res.data.token);
       navigate("/visit");
     } catch (err) {
       alert("Login gagal: " + (err.response?.data?.message || err.message));
+    } finally {
+      setIsLoading(false); // Reset loading state
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
+            <p className="text-gray-700">Memproses data...</p>
+          </div>
+        </div>
+      )}
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
         {/* Kontainer Logo */}
         <div className="flex justify-center mb-6">
@@ -36,7 +48,9 @@ const LoginForm = () => {
           />
         </div>
 
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Login Admin</h2>
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
+          Login Admin
+        </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -69,10 +83,11 @@ const LoginForm = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg
-                       transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className={`w-full bg-blue-500 text-white py-1.5 lg:py-3 px-6 rounded-lg font-small hover:bg-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm lg:text-base ${
+              isLoading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           >
-            Login
+            {isLoading ? "Memproses..." : "Login"}
           </button>
         </form>
       </div>

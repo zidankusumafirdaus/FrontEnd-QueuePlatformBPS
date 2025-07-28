@@ -19,8 +19,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path="/" element={<Navigate to="/BPS-BukuTamu" replace />} />
         <Route path="/BPS-BukuTamu" element={<HomePage />} />
-        <Route path="/guest" element={<GuestPage />} />
-        <Route path="/queue-number" element={<QueueNumber />} />
+        <Route path="/Form-Biodata" element={<GuestPage />} />
+        <Route path="/Nomor-Antrian" element={<QueueNumber />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/visit" element={<ProtectedRoute> <VisitPage /> </ProtectedRoute>} />
         <Route path="/cslogs" element={<ProtectedRoute> <CSLogs /> </ProtectedRoute>} />

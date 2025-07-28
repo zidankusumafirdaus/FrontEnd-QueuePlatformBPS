@@ -18,6 +18,7 @@ const GuestForm = () => {
   });
 
   const [currentStep, setCurrentStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -34,6 +35,7 @@ const GuestForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       // Step 1: Submit form
       const res = await createGuest(form);
@@ -55,7 +57,7 @@ const GuestForm = () => {
       const { queue_number, timestamp, target_service } = thisVisit;
 
       // Step 4: Navigate to queue number page
-      navigate("/queue-number", {
+      navigate("/nomor-antrian", {
         state: {
           guest_name,
           target_service,
@@ -66,11 +68,21 @@ const GuestForm = () => {
       });
     } catch (err) {
       alert("Error: " + (err.response?.data?.message || err.message));
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
+      {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
+            <p className="text-gray-700">Memproses data...</p>
+          </div>
+        </div>
+      )}
       {/* Mobile Logo - Only visible on mobile */}
       <div className="lg:hidden bg-white flex justify-center items-center py-6 px-4">
         <img src={logo_bps} alt="Logo BPS" className="w-48 h-auto" />
@@ -330,15 +342,20 @@ const GuestForm = () => {
                     </div>
 
                     {/* Submit Button */}
-                    <div className="pt-4">
-                      <button
-                        type="button"
-                        onClick={handleSubmit}
-                        className="w-full bg-blue-500 text-white py-1.5 lg:py-3 px-6 rounded-lg font-small hover:bg-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm lg:text-base"
-                      >
-                        Submit
-                      </button>
-                    </div>
+                    {currentStep === 2 && (
+                      <div className="pt-4">
+                        <button
+                          type="button"
+                          onClick={handleSubmit}
+                          disabled={isLoading}
+                          className={`w-full bg-blue-500 text-white py-1.5 lg:py-3 px-6 rounded-lg font-small hover:bg-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm lg:text-base ${
+                            isLoading ? "opacity-50 cursor-not-allowed" : ""
+                          }`}
+                        >
+                          {isLoading ? "Memproses..." : "Submit"}
+                        </button>
+                      </div>
+                    )}
                   </>
                 )}
               </div>

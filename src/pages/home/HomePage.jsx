@@ -36,7 +36,7 @@ const HomePage = () => {
           </div>
 
           <button
-            onClick={() => navigate('/guest')}
+            onClick={() => navigate('/form-biodata')}
             className="hidden sm:flex bg-white rounded-full p-3 shadow-md"
           >
             <ArrowRight className="w-10 h-10 text-black" />
@@ -45,7 +45,7 @@ const HomePage = () => {
       </div>
 
       <button
-        onClick={() => navigate('/guest')}
+        onClick={() => navigate('/form-biodata')}
         className="sm:hidden absolute bottom-6 right-6 bg-white rounded-full p-3 shadow-md"
       >
         <ArrowRight className="w-6 h-6 text-black" />
