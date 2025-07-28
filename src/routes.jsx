@@ -24,7 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/login-BukuTamu" element={<LoginPage />} />
         <Route path="/visit-guest" element={<ProtectedRoute> <VisitPage /> </ProtectedRoute>} />
         <Route path="/cslogs-BukuTamu" element={<ProtectedRoute> <CSLogs /> </ProtectedRoute>} />
-        <Route path="/allguests" element={<ProtectedRoute> <AllGuestPage /> </ProtectedRoute>} />
+        <Route path="/all-guests" element={<ProtectedRoute> <AllGuestPage /> </ProtectedRoute>} />
       </Routes>
     </Router>
   </React.StrictMode>
