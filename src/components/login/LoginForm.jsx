@@ -20,7 +20,7 @@ const LoginForm = () => {
     try {
       const res = await loginCS(form);
       saveToken(res.data.token);
-      navigate("/visit");
+      navigate("/visit-guest");
     } catch (err) {
       alert("Login gagal: " + (err.response?.data?.message || err.message));
     } finally {

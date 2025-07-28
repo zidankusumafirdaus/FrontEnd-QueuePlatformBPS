@@ -41,10 +41,10 @@ const CSLogs = () => {
 
         <nav className="space-y-4">
           <button
-            onClick={() => navigate("/visit")}
+            onClick={() => navigate("/visit-guest")}
             className={`
               w-full text-left py-2 px-4 rounded-md transition-colors duration-200 flex items-center space-x-3
-              ${isActive("/visit") ? "bg-gray-700 text-white font-bold" : "hover:bg-gray-700 text-gray-300"}
+              ${isActive("/visit-guest") ? "bg-gray-700 text-white font-bold" : "hover:bg-gray-700 text-gray-300"}
             `}
           >
             <FaClipboardList className="text-xl" />
@@ -63,10 +63,10 @@ const CSLogs = () => {
           </button>
 
           <button
-            onClick={() => navigate("/cslogs")}
+            onClick={() => navigate("/cslogs-BukuTamu")}
             className={`
               w-full text-left py-2 px-4 rounded-md transition-colors duration-200 flex items-center space-x-3
-              ${isActive("/cslogs") ? "bg-gray-700 text-white font-bold" : "hover:bg-gray-700 text-gray-300"}
+              ${isActive("/cslogs-BukuTamu") ? "bg-gray-700 text-white font-bold" : "hover:bg-gray-700 text-gray-300"}
             `}
           >
             <FaChartBar className="text-xl" />

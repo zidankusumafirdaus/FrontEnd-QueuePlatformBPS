@@ -6,7 +6,7 @@ const ProtectedRoute = ({ children }) => {
   console.log("Is Logged In:", isLoggedIn());
 
   if (!isLoggedIn()) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login-BukuTamu" replace />;
   }
 
   return children;

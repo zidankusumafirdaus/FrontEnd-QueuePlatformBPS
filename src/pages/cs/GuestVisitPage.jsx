@@ -40,11 +40,11 @@ const VisitPage = () => {
 
         <nav className="space-y-4">
           <button
-            onClick={() => navigate("/visit")}
+            onClick={() => navigate("/visit-guest")}
             className={`
               w-full text-left py-2 px-4 rounded-md transition-colors duration-200 flex items-center space-x-3
               ${
-                isActive("/visit")
+                isActive("/visit-guest")
                   ? "bg-gray-700 text-white font-bold"
                   : "hover:bg-gray-700 text-gray-300"
               }
@@ -70,11 +70,11 @@ const VisitPage = () => {
           </button>
 
           <button
-            onClick={() => navigate("/cslogs")}
+            onClick={() => navigate("/cslogs-BukuTamu")}
             className={`
               w-full text-left py-2 px-4 rounded-md transition-colors duration-200 flex items-center space-x-3
               ${
-                isActive("/cslogs")
+                isActive("/cslogs-BukuTamu")
                   ? "bg-gray-700 text-white font-bold"
                   : "hover:bg-gray-700 text-gray-300"
               }

@@ -17,7 +17,7 @@ const HomePage = () => {
 
       <div className="absolute top-4 right-4 pt-8 sm:top-10 sm:right-6">
         <button
-          onClick={() => navigate('/login')}
+          onClick={() => navigate('/login-BukuTamu')}
           className="bg-white text-black px-4 py-1 sm:px-5 sm:py-2 text-sm sm:text-base rounded-full shadow-md hover:bg-gray-100 transition"
         >
           Login
