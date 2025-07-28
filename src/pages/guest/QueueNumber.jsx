@@ -22,11 +22,11 @@ const QueueNumber = () => {
       </div>
 
       {/* Main Content */}
-      <div className="w-full max-w-4xl flex flex-col lg:flex-row">
+      <div className="w-full max-w-6xl flex object-center">
         {/* Desktop Logo */}
         <div className="hidden lg:flex lg:w-1/3 bg-white flex-col items-center justify-center p-6">
           <div className="mb-6">
-            <img src={logo_bps} alt="Logo BPS" className="w-32 md:w-32 lg:w-48 xl:w-64" />
+            <img src={logo_bps} alt="Logo BPS" className="w-32 md:w-56 lg:w-80 xl:w-64" />
           </div>
         </div>
 
