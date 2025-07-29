@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { FaChartBar, FaUsers, FaSignOutAlt, FaClipboardList } from 'react-icons/fa';
+import { FaChartBar, FaUsers, FaSignOutAlt, FaClipboardList, FaDownload } from 'react-icons/fa';
 
 // Importing from service, utils & components
 import { getCSLogs } from "../../service/api/api";
@@ -75,6 +75,17 @@ const CSLogs = () => {
           >
             <FaUsers className="text-xl" />
             <span>Semua Tamu</span>
+          </button>
+
+          <button
+            onClick={() => navigate("/weekly-exports")}
+            className={`
+                w-full text-left py-2 px-4 rounded-md flex items-center space-x-3 transition-colors
+                ${isActive("/weekly-exports") ? "bg-gray-700 font-bold" : "hover:bg-gray-700 text-gray-300"}
+            `}
+            >
+            <FaDownload className="text-xl" />
+            <span>Export</span>
           </button>
 
           <button

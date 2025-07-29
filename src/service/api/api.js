@@ -56,3 +56,32 @@ export const getNextReset = () => API.get("/cs/reset-countdown");
 export const exportGuests = () => API.get("/export/guest", { responseType: "blob" });
 export const exportVisits = () => API.get("/export/visit", { responseType: "blob" });
 export const exportLogs = () => API.get("/export/logs", { responseType: "blob" });
+
+// Export API for Weekly Auto Exports
+export const getWeeklyExports = () => {
+  const token = localStorage.getItem("token");
+  return API.get("/export/weekly-auto-exports", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const downloadWeeklyExport = (filename) => {
+  const token = localStorage.getItem("token");
+  return API.get(`/export/weekly-download-exports/${filename}`, {
+    responseType: "blob",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const deleteWeeklyExport = (filename) => {
+  const token = localStorage.getItem("token");
+  return API.delete(`/export/weekly-delete-exports/${filename}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { FaChartBar, FaUsers, FaSignOutAlt, FaRedo, FaTrash, FaClipboardList } from "react-icons/fa";
+import { FaChartBar, FaUsers, FaSignOutAlt, FaRedo, FaTrash, FaClipboardList, FaDownload } from "react-icons/fa";
 import { fetchNextReset, calculateCountdown } from "../../utils/ResetCountVisit";
 import { LogoutPage } from "../../utils/LogoutPage";
 import { ResetQueue } from "../../utils/ResetQueue";
@@ -99,6 +99,17 @@ const VisitPage = () => {
           >
             <FaUsers className="text-xl" />
             <span>Semua Tamu</span>
+          </button>
+
+          <button
+            onClick={() => navigate("/weekly-exports")}
+            className={`
+                w-full text-left py-2 px-4 rounded-md flex items-center space-x-3 transition-colors
+                ${isActive("/weekly-exports") ? "bg-gray-700 font-bold" : "hover:bg-gray-700 text-gray-300"}
+            `}
+            >
+            <FaDownload className="text-xl" />
+            <span>Export</span>
           </button>
 
           <button
