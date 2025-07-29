@@ -141,7 +141,7 @@ const GuestForm = () => {
       </div>
 
       {/* Form */}
-      <div className="flex-1 lg:w-1/2 bg-white flex flex-col h-screen scroll-container">
+      <div className="flex-1 lg:w-1/2 bg-white flex flex-col h-screen scroll-container lg:justify-center">
         {/* Stepper Navbar di luar container form, full width */}
         <div className="w-full bg-white flex justify-center items-center pt-0 pb-0">
           <div className="w-full">
@@ -183,9 +183,9 @@ const GuestForm = () => {
         </div>
 
         {/* Container form */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="p-4 lg:p-8">
-            <div className="max-w-md mx-auto space-y-2">
+        <div className="flex-1 overflow-y-auto flex flex-col items-center">
+          <div className="w-full max-w-full sm:max-w-xl md:max-w-xl lg:max-w-2xl px-4 py-6">
+            <div className="space-y-2">
               {currentStep === 1 && (
                 <>
                   <div>
@@ -198,7 +198,7 @@ const GuestForm = () => {
                       value={form.guest_name}
                       onChange={handleChange}
                       placeholder="Masukkan Nama Lengkap"
-                      className="w-full px-3 py-1.5 border rounded-md focus:ring focus:ring-blue-400 outline-none"
+                      className="w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-400 outline-none"
                       required
                     />
                   </div>
@@ -213,7 +213,7 @@ const GuestForm = () => {
                       placeholder="Email"
                       value={form.email}
                       onChange={handleChange}
-                      className="w-full px-3 py-1.5 lg:px-4 lg:py-1 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none text-sm lg:text-base"
+                      className="w-full px-3 py-2 lg:px-4 lg:py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none text-sm lg:text-base"
                       required
                     />
                   </div>
@@ -226,7 +226,7 @@ const GuestForm = () => {
                       name="gender"
                       value={form.gender}
                       onChange={handleChange}
-                      className="w-full px-3 py-1.5 lg:px-4 lg:py-1 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none bg-white appearance-none text-sm lg:text-base"
+                      className="w-full px-3 py-2 lg:px-4 lg:py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none bg-white appearance-none text-sm lg:text-base"
                       required
                       style={{
                         backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
@@ -250,7 +250,7 @@ const GuestForm = () => {
                       placeholder="Telepon"
                       value={form.phone}
                       onChange={handleChange}
-                      className="w-full px-3 py-1.5 lg:px-4 lg:py-1 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none text-sm lg:text-base"
+                      className="w-full px-3 py-2 lg:px-4 lg:py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none text-sm lg:text-base"
                       required
                     />
                   </div>
@@ -263,7 +263,7 @@ const GuestForm = () => {
                       name="identity_type"
                       value={form.identity_type}
                       onChange={handleChange}
-                      className="w-full px-3 py-1.5 lg:px-4 lg:py-1 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none bg-white appearance-none text-sm lg:text-base"
+                      className="w-full px-3 py-2 lg:px-4 lg:py-1 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none bg-white appearance-none text-sm lg:text-base"
                       style={{
                         backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
                         backgroundPosition: "right 12px center",
@@ -287,7 +287,7 @@ const GuestForm = () => {
                           value={form.custom_identity_type || ""}
                           onChange={handleChange}
                           placeholder="Masukkan jenis identitas"
-                          className="w-full px-3 py-1.5 lg:px-4 lg:py-1 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none text-sm lg:text-base"
+                          className="w-full px-3 py-2 lg:px-4 lg:py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none text-sm lg:text-base"
                           required
                         />
                       </div>
@@ -304,7 +304,7 @@ const GuestForm = () => {
                       placeholder="Nomor Identitas"
                       value={form.identity_number}
                       onChange={handleChange}
-                      className="w-full px-3 py-1.5 lg:px-4 lg:py-1 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none text-sm lg:text-base"
+                      className="w-full px-3 py-2 lg:px-4 lg:py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none text-sm lg:text-base"
                       required
                     />
                   </div>
@@ -319,7 +319,7 @@ const GuestForm = () => {
                       value={form.institution}
                       onChange={handleChange}
                       placeholder="Instansi"
-                      className="w-full px-3 py-1.5 lg:px-4 lg:py-1 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none text-sm lg:text-base"
+                      className="w-full px-3 py-2 lg:px-4 lg:py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none text-sm lg:text-base"
                       required
                     />
                   </div>
@@ -328,7 +328,7 @@ const GuestForm = () => {
                     <button
                       type="button"
                       onClick={handleNext}
-                      className="w-full bg-blue-500 text-white py-1 lg:py-1.5 px-6 rounded-lg font-small hover:bg-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm lg:text-base"
+                      className="w-full bg-blue-500 text-white py-1 lg:py-2 px-6 rounded-lg font-small hover:bg-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm lg:text-base"
                     >
                       Lanjut
                     </button>
@@ -347,7 +347,7 @@ const GuestForm = () => {
                       name="purpose"
                       value={form.purpose}
                       onChange={handleChange}
-                      className="w-full px-3 py-1.5 border rounded-md focus:ring focus:ring-blue-400 outline-none"
+                      className="w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-400 outline-none"
                     />
                   </div>
 
@@ -359,7 +359,7 @@ const GuestForm = () => {
                       name="target_service"
                       value={form.target_service}
                       onChange={handleChange}
-                      className="w-full px-3 py-1.5 lg:px-4 lg:py-1 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none bg-white appearance-none text-sm lg:text-base"
+                      className="w-full px-3 py-2 lg:px-4 lg:py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none bg-white appearance-none text-sm lg:text-base"
                       // ... style dan lainnya
                     >
                       <option value="pelayanan statistik terpadu">
@@ -377,7 +377,7 @@ const GuestForm = () => {
                           value={form.custom_target_service || ""}
                           onChange={handleChange}
                           placeholder="Masukkan jenis layanan"
-                          className="w-full px-3 py-1.5 lg:px-4 lg:py-1 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none text-sm lg:text-base"
+                          className="w-full px-3 py-2 lg:px-4 lg:py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none text-sm lg:text-base"
                           required
                         />
                       </div>
@@ -390,7 +390,7 @@ const GuestForm = () => {
                         type="submit"
                         onClick={handleSubmit}
                         disabled={isLoading}
-                        className={`w-full bg-blue-500 text-white py-1 lg:py-1.5 px-6 rounded-lg font-small hover:bg-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm lg:text-base ${
+                        className={`w-full bg-blue-500 text-white py-1 lg:py-2 px-6 rounded-lg font-small hover:bg-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm lg:text-base ${
                           isLoading ? "opacity-50 cursor-not-allowed" : ""
                         }`}
                       >
