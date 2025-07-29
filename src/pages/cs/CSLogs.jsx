@@ -16,20 +16,35 @@ const CSLogs = () => {
 
   useEffect(() => {
     const fetchLogs = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await getCSLogs(token);
-        setLogs(res.data);
-      } catch (error) {
-        console.error("Gagal mengambil log CS:", error);
-        alert("Gagal mengambil log CS. Silakan coba lagi.");
-      } finally {
-        setLoading(false);
-      }
-    };
+    try {
+      const token = localStorage.getItem("token");
+      const res = await getCSLogs(token);
+      setLogs(res.data);
+    } catch (error) {
+      console.error("Gagal mengambil log CS:", error);
 
-    fetchLogs();
-  }, []);
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 403) {
+          navigate('/403');
+        } else if (status === 405) {
+          navigate('/405');
+        } else if (status === 500) {
+          navigate('/500');
+        } else {
+          alert("Gagal mengambil log CS. Silakan coba lagi.");
+        }
+      } else {
+        alert("Tidak dapat terhubung ke server.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchLogs();
+}, [navigate]);
 
   return (
     <div className="flex h-screen bg-gray-100">

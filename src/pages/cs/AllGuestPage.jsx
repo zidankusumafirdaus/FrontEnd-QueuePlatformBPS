@@ -31,14 +31,28 @@ const GuestListPage = () => {
         setGuests(response.data);
       } catch (err) {
         console.error("Error fetching guests:", err);
-        setError("Gagal memuat data tamu. Silakan coba lagi.");
-      } finally {
-        setLoading(false);
+        
+        if (err.response) {
+        const status = err.response.status;
+        if (status === 403) {
+          navigate('/403');
+        } else if (status === 405) {
+          navigate('/405');
+        } else if (status === 500) {
+          navigate('/500');
+        } else {
+          setError("Gagal memuat data tamu. Silakan coba lagi.");
+        }
+      } else {
+        setError("Tidak dapat terhubung ke server.");
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchGuests();
-  }, []);
+  fetchGuests();
+  }, [navigate]);
 
   const handleConfirmDelete = async () => {
     setShowConfirm(false);

@@ -16,15 +16,28 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true); // Set loading state to true
+    setIsLoading(true);
     try {
       const res = await loginCS(form);
       saveToken(res.data.token);
       navigate("/visit-guest");
     } catch (err) {
-      alert("Login gagal: " + (err.response?.data?.message || err.message));
+      if (err.response) {
+        const status = err.response.status;
+        if (status === 403) {
+          navigate("/403");
+        } else if (status === 405) {
+          navigate("/405");
+        } else if (status === 500) {
+          navigate("/500");
+        } else {
+          alert("Login gagal: " + (err.response.data.message || "Terjadi kesalahan."));
+        }
+      } else {
+        alert("Login gagal: Tidak dapat menghubungi server.");
+      }
     } finally {
-      setIsLoading(false); // Reset loading state
+      setIsLoading(false);
     }
   };
 
@@ -86,6 +99,7 @@ const LoginForm = () => {
             className={`w-full bg-blue-500 text-white py-1.5 lg:py-3 px-6 rounded-lg font-small hover:bg-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm lg:text-base ${
               isLoading ? "opacity-50 cursor-not-allowed" : ""
             }`}
+            disabled={isLoading}
           >
             {isLoading ? "Memproses..." : "Login"}
           </button>
