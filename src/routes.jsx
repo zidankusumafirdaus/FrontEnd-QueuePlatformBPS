@@ -13,6 +13,7 @@ import CSLogs from "./pages/cs/CSLogs";
 import AllGuestPage from "./pages/cs/AllGuestPage";
 import HomePage from "./pages/home/HomePage";
 import QueueKunjunganDinas from './pages/guest/QueueKunjunganDinas';
+import WeeklyAutoExport from './pages/cs/WeeklyAutoExport';
 
 // Error components
 import ErrorHandlers from './utils/ErrorHandlers';
@@ -38,6 +39,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/visit-guest" element={<ProtectedRoute> <VisitPage /> </ProtectedRoute>} />
           <Route path="/cslogs-BukuTamu" element={<ProtectedRoute> <CSLogs /> </ProtectedRoute>} />
           <Route path="/all-guests" element={<ProtectedRoute> <AllGuestPage /> </ProtectedRoute>} />
+          <Route path="/weekly-exports" element={<ProtectedRoute> <AllGuestPage /> </ProtectedRoute>} />
 
           {/* Error Handlers */}
           <Route path="*" element={<NotFound />} />
