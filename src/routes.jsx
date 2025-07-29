@@ -13,19 +13,37 @@ import CSLogs from "./pages/cs/CSLogs";
 import AllGuestPage from "./pages/cs/AllGuestPage";
 import HomePage from "./pages/home/HomePage";
 
+// Error components
+import ErrorHandlers from './utils/ErrorHandlers';
+import NotFound from './components/error/404';
+import Error403 from './components/error/403';
+import Error405 from './components/error/405';
+import Error500 from './components/error/500';
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="/BPS-BukuTamu" replace />} />
-        <Route path="/BPS-BukuTamu" element={<HomePage />} />
-        <Route path="/Form-Biodata" element={<GuestPage />} />
-        <Route path="/Nomor-Antrian" element={<QueueNumber />} />
-        <Route path="/login-BukuTamu" element={<LoginPage />} />
-        <Route path="/visit-guest" element={<ProtectedRoute> <VisitPage /> </ProtectedRoute>} />
-        <Route path="/cslogs-BukuTamu" element={<ProtectedRoute> <CSLogs /> </ProtectedRoute>} />
-        <Route path="/all-guests" element={<ProtectedRoute> <AllGuestPage /> </ProtectedRoute>} />
-      </Routes>
-    </Router>
+    <ErrorHandlers>
+      <Router>
+        <Routes>
+          {/* Guest */}
+          <Route path="/" element={<Navigate to="/BPS-BukuTamu" replace />} />
+          <Route path="/BPS-BukuTamu" element={<HomePage />} />
+          <Route path="/Form-Biodata" element={<GuestPage />} />
+          <Route path="/Nomor-Antrian" element={<QueueNumber />} />
+
+          {/* Customer Service */}
+          <Route path="/login-BukuTamu" element={<LoginPage />} />
+          <Route path="/visit-guest" element={<ProtectedRoute> <VisitPage /> </ProtectedRoute>} />
+          <Route path="/cslogs-BukuTamu" element={<ProtectedRoute> <CSLogs /> </ProtectedRoute>} />
+          <Route path="/all-guests" element={<ProtectedRoute> <AllGuestPage /> </ProtectedRoute>} />
+
+          {/* Error Handlers */}
+          <Route path="*" element={<NotFound />} />
+          <Route path="/403" element={<Error403 />} />
+          <Route path="/405" element={<Error405 />} />
+          <Route path="/500" element={<Error500 />} />
+        </Routes>
+      </Router>
+    </ErrorHandlers>
   </React.StrictMode>
 );
