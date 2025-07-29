@@ -26,10 +26,9 @@ const LoginForm = () => {
       const res = await loginCS(form);
       saveToken(res.data.token);
       navigate("/visit-guest");
-    } catch (err) {
-      console.log("Login gagal:", err);
-      const msg = err.response?.data?.message || err.message;
-      setError("Login gagal: " + msg);
+    } catch {
+      const msg = 'Periksa username dan password Anda.';
+      setError(msg);
     } finally {
       setIsLoading(false);
     }

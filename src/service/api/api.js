@@ -1,5 +1,4 @@
 import axios from "axios";
-import { logout } from "../../utils/auth";
 
 // Buat instance axios
 const API = axios.create({
@@ -18,13 +17,12 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-// Interceptor untuk menangani error (misalnya 401 Unauthorized)
+// Interceptor untuk menangani error
 API.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      logout();
-      window.location.href = "/login-BukuTamu";
+      console.error("Token tidak valid atau kedaluwarsa.");
     }
     return Promise.reject(error);
   }
