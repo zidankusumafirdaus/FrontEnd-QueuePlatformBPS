@@ -12,6 +12,7 @@ import LoginPage from "./pages/cs/LoginPage";
 import CSLogs from "./pages/cs/CSLogs";
 import AllGuestPage from "./pages/cs/AllGuestPage";
 import HomePage from "./pages/home/HomePage";
+import QueueKunjunganDinas from './pages/guest/QueueKunjunganDinas';
 
 // Error components
 import ErrorHandlers from './utils/ErrorHandlers';
@@ -30,6 +31,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/BPS-BukuTamu" element={<HomePage />} />
           <Route path="/Form-Biodata" element={<GuestPage />} />
           <Route path="/Nomor-Antrian" element={<QueueNumber />} />
+          <Route path="/queue-kunjungan-dinas" element={<QueueKunjunganDinas />} />
 
           {/* Customer Service */}
           <Route path="/login-BukuTamu" element={<LoginPage />} />

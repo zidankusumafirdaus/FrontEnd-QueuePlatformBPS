@@ -17,6 +17,11 @@ export default {
       },
       colors: {
         BiruTerang: "#00AEEF",
+        AbuAbu: "#F5F5F5",
+        Cyan: "#C4EFFF",
+        Biru: "#00AEEF",
+        Gray: "#EBF1FF",
+        GrayGelap: "#BDC4DE",
       }
     },
   },
