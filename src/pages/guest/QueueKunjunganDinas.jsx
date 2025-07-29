@@ -24,9 +24,9 @@ const QueueNumber = () => {
       {/* Main Content */}
       <div className="w-full max-w-6xl flex object-center">
         {/* Desktop Logo */}
-        <div className="hidden lg:flex lg:w-1/3 bg-white flex-col items-center justify-center p-6">
+        <div className="hidden lg:flex bg-white flex-col items-center justify-center p-6">
           <div className="mb-6">
-            <img src={logo_bps} alt="Logo BPS" className="w-32 md:w-56 lg:w-80 xl:w-64" />
+            <img src={logo_bps} alt="Logo BPS" className="w-64 md:w-56 lg:w-80 xl:w-64" />
           </div>
         </div>
 
@@ -47,20 +47,6 @@ const QueueNumber = () => {
               <p className="text-white font-bold text-sm break-words">
                 {target_service}
               </p>
-            </div>
-          </div>
-
-          {/* Queue Number */}
-          <div className="text-center mb-8">
-            <h1 className="text-[#00B4D8] text-2xl font-bold mb-4">
-              NOMOR ANTRIAN
-            </h1>
-            <div className="inline-block rounded-lg p-6">
-              <span className="text-[#00B4D8] text-6xl font-bold">
-                <p>
-                  {queue_number}
-                  </p>
-              </span>
             </div>
           </div>
 
