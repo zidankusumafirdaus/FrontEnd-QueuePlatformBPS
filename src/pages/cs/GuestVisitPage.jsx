@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaChartBar, FaUsers, FaSignOutAlt, FaRedo, FaTrash, FaClipboardList, } from "react-icons/fa";
+import { fetchNextReset, calculateCountdown } from "../../utils/ResetCountVisit";
 
 import { LogoutPage } from "../../utils/LogoutPage";
 import { ResetQueue } from "../../utils/ResetQueue";
@@ -11,6 +13,7 @@ import ExportVisitButton from "../../components/export/ExportVisitButton";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+
 const VisitPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -19,6 +22,24 @@ const VisitPage = () => {
   // State untuk modal konfirmasi
   const [showResetDatabaseModal, setShowResetDatabaseModal] = useState(false);
   const [showResetQueueModal, setShowResetQueueModal] = useState(false);
+
+  // State untuk countdown reset otomatis
+  const [nextReset, setNextReset] = useState(null);
+  const [countdown, setCountdown] = useState({ hours: 0, minutes: 0, seconds: 0 });
+
+  useEffect(() => {
+    fetchNextReset().then((resetTime) => {
+      setNextReset(resetTime);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!nextReset) return;
+    const interval = setInterval(() => {
+      setCountdown(calculateCountdown(nextReset));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [nextReset]);
 
   const handleConfirmResetDatabase = () => {
     setShowResetDatabaseModal(false);
@@ -98,6 +119,23 @@ const VisitPage = () => {
 
       {/* Main Content */}
       <main className="flex-1 overflow-auto p-8">
+        {/* Countdown Reset Database */}
+        <div className="mb-4">
+          <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded shadow">
+            <span className="font-semibold">Reset Database Otomatis:</span>{" "}
+            {nextReset ? (
+              <>
+                {countdown.hours} jam {countdown.minutes} menit {countdown.seconds} detik
+                {countdown.hours === 0 && countdown.minutes === 0 && countdown.seconds === 0 && (
+                  <span className="ml-2 text-red-600 font-bold">(Reset!)</span>
+                )}
+              </>
+            ) : (
+              <span>Memuat countdown...</span>
+            )}
+          </div>
+        </div>
+
         <h1 className="text-4xl font-bold mb-6 text-gray-800">Data Kunjungan</h1>
 
         <section className="bg-white p-6 rounded-lg shadow-md mb-8">

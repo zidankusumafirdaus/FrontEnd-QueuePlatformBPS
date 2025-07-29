@@ -45,11 +45,12 @@ export const resetDatabase = (token) =>
 export const exportGuests = () => API.get("/export/guest", { responseType: "blob" });
 export const exportVisits = () => API.get("/export/visit", { responseType: "blob" });
 export const exportLogs = () => API.get("/export/logs", { responseType: "blob" });
+export const getNextReset = () => API.get("/cs/reset-countdown");
 
 API.interceptors.response.use( (response) => response, (error) => {
     if (error.response?.status === 401) {
       logout();
-      window.location.href = "/login";
+      window.location.href = "/login-BukuTamu";
     }
     return Promise.reject(error);
   }
