@@ -9,33 +9,27 @@ import logoPST from "../../assets/logoPST.png";
 const LoginForm = () => {
   const [form, setForm] = useState({ admin: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setError("");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setError("");
+
     try {
       const res = await loginCS(form);
       saveToken(res.data.token);
       navigate("/visit-guest");
     } catch (err) {
-      if (err.response) {
-        const status = err.response.status;
-        if (status === 403) {
-          navigate("/403");
-        } else if (status === 405) {
-          navigate("/405");
-        } else if (status === 500) {
-          navigate("/500");
-        } else {
-          alert("Login gagal: " + (err.response.data.message || "Terjadi kesalahan."));
-        }
-      } else {
-        alert("Login gagal: Tidak dapat menghubungi server.");
-      }
+      console.log("Login gagal:", err);
+      const msg = err.response?.data?.message || err.message;
+      setError("Login gagal: " + msg);
     } finally {
       setIsLoading(false);
     }
@@ -51,14 +45,10 @@ const LoginForm = () => {
           </div>
         </div>
       )}
+
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
-        {/* Kontainer Logo */}
         <div className="flex justify-center mb-6">
-          <img
-            src={logoPST}
-            alt="Logo PST"
-            className="w-28 h-28 object-contain"
-          />
+          <img src={logoPST} alt="Logo PST" className="w-28 h-28 object-contain" />
         </div>
 
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
@@ -67,9 +57,6 @@ const LoginForm = () => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="admin" className="sr-only">
-              Username
-            </label>
             <input
               type="text"
               name="admin"
@@ -77,13 +64,10 @@ const LoginForm = () => {
               placeholder="Username"
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500 transition duration-150 ease-in-out"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500"
             />
           </div>
           <div>
-            <label htmlFor="password" className="sr-only">
-              Password
-            </label>
             <input
               type="password"
               name="password"
@@ -91,15 +75,22 @@ const LoginForm = () => {
               placeholder="Password"
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500 transition duration-150 ease-in-out"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500"
             />
           </div>
+
+          {error && (
+            <div className="text-sm text-red-600 text-center -mt-3">
+              {error}
+            </div>
+          )}
+
           <button
             type="submit"
-            className={`w-full bg-blue-500 text-white py-1.5 lg:py-3 px-6 rounded-lg font-small hover:bg-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm lg:text-base ${
+            disabled={isLoading}
+            className={`w-full bg-blue-500 text-white py-2 px-6 rounded-lg font-medium hover:bg-blue-600 transition duration-200 ${
               isLoading ? "opacity-50 cursor-not-allowed" : ""
             }`}
-            disabled={isLoading}
           >
             {isLoading ? "Memproses..." : "Login"}
           </button>

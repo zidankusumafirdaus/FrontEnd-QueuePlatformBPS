@@ -11,7 +11,6 @@ const ExportGuestButton = () => {
 
       // Check if the response contains actual data
       if (res.data.size === 0) {
-        alert("Tidak ada data tamu untuk diekspor.");
         return;
       }
 
@@ -22,9 +21,7 @@ const ExportGuestButton = () => {
       document.body.appendChild(link);
       link.click();
       link.remove();
-      alert("Data tamu berhasil diunduh!"); // Success feedback
     } catch (err) {
-      alert("Gagal mengunduh data tamu. Silakan coba lagi.");
       console.error("Export error:", err);
     }
   };

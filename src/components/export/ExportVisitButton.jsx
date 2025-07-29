@@ -8,7 +8,6 @@ const ExportVisitButton = () => {
       const res = await exportVisits();
 
       if (res.data.size === 0) {
-        alert("Tidak ada data kunjungan untuk diekspor.");
         return;
       }
 
@@ -19,9 +18,7 @@ const ExportVisitButton = () => {
       document.body.appendChild(link);
       link.click();
       link.remove();
-      alert("Data kunjungan berhasil diunduh!");
     } catch (err) {
-      alert("Gagal mengunduh data kunjungan. Silakan coba lagi.");
       console.error("Export error:", err);
     }
   };

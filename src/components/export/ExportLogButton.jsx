@@ -11,7 +11,6 @@ const ExportLogButton = () => {
 
       // Check if the response contains actual data
       if (res.data.size === 0) {
-        alert("Tidak ada data log untuk diekspor.");
         return;
       }
 
@@ -22,9 +21,7 @@ const ExportLogButton = () => {
       document.body.appendChild(link);
       link.click();
       link.remove();
-      alert("Data log berhasil diunduh!"); // Feedback sukses
     } catch (err) {
-      alert("Gagal mengunduh data log. Silakan coba lagi.");
       console.error("Export log error:", err);
     }
   };

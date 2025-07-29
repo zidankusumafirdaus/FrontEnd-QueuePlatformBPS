@@ -172,9 +172,6 @@ const VisitPage = () => {
           <VisitTable />
         </section>
 
-        {/* Toast */}
-        <ToastContainer position="top-right" autoClose={3000} />
-
         {/* Modal Reset Database */}
         {showResetDatabaseModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
