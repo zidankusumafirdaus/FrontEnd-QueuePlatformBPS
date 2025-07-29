@@ -41,7 +41,7 @@ const GuestForm = () => {
       alert("Harap isi tujuan kunjungan lainnya");
       return;
     }
-    if (form.target_service === "other" && !form.custom_identity_type) {
+    if (form.identity_type === "other" && !form.custom_identity_type) {
       alert("Harap isi identitas");
       return;
     }
@@ -75,7 +75,7 @@ const GuestForm = () => {
 
       if (!thisVisit) throw new Error("Visit tidak ditemukan.");
 
-      const { queue_number, timestamp, target_service } = thisVisit;
+      const { queue_number, timestamp } = thisVisit;
 
       if (form.target_service === "Kunjungan Dinas") {
         navigate("/queue-kunjungan-dinas", {
@@ -141,58 +141,48 @@ const GuestForm = () => {
       </div>
 
       {/* Form */}
-      <div className="flex-1 lg:w-1/2 bg-white flex flex-col">
-        <div className="bg-white border-b border-gray-200 p-2 lg:p-3">
-          <div className="max-w-md mx-auto">
-            <div className="flex items-center justify-center">
-              <div className="flex items-center">
+      <div className="flex-1 lg:w-1/2 bg-white flex flex-col h-screen scroll-container">
+        {/* Stepper Navbar di luar container form, full width */}
+        <div className="w-full bg-white flex justify-center items-center pt-0 pb-0">
+          <div className="w-full">
+            <div className="flex w-full overflow-hidden shadow-sm border border-blue-100">
+              {/* Step 1: gunakan RTL agar rounded di kiri */}
+              <div dir="rtl" className="flex-1">
                 <button
                   onClick={() => handleStepChange(1)}
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${
-                    currentStep === 1
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-300 text-gray-500 hover:bg-gray-400"
-                  }`}
+                  className={`w-full flex items-center gap-2 justify-center py-2 transition-all duration-200
+                    ${currentStep === 1
+                      ? "bg-gradient-to-r from-[#b7d6f8] to-[#4fc3f7] text-white font-bold"
+                      : "bg-[#ffffff] text-[#b0b5c3] font-semibold"}
+                    ${currentStep === 1 ? "rounded-s-3xl" : ""} focus:outline-none`}
                 >
-                  1
-                </button>
-                <button
-                  onClick={() => handleStepChange(1)}
-                  className={`ml-2 text-sm ${
-                    currentStep === 1
-                      ? "text-blue-500"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
-                >
-                  Data Diri
+                  <span className="text-base font-bold">Data Diri</span>
+                  <span className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold
+                    ${currentStep === 1 ? "bg-white text-[#4fc3f7]" : "bg-[#e3eafc] text-[#b0b5c3]"}
+                  `}>1</span>
                 </button>
               </div>
-              <div className="flex items-center ml-4 lg:ml-8">
+              {/* Step 2: gunakan LTR agar rounded di kanan */}
+              <div dir="ltr" className="flex-1">
                 <button
                   onClick={() => handleStepChange(2)}
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${
-                    currentStep === 2
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-300 text-gray-500 hover:bg-gray-400"
-                  }`}
+                  className={`w-full flex items-center gap-2 justify-center py-2 transition-all duration-200
+                    ${currentStep === 2
+                      ? "bg-gradient-to-r from-[#4fc3f7] to-[#3b9be7] text-white font-bold"
+                      : "bg-[#ffffff] text-[#b0b5c3] font-semibold"}
+                    ${currentStep === 2 ? "rounded-s-3xl" : ""} focus:outline-none`}
                 >
-                  2
-                </button>
-                <button
-                  onClick={() => handleStepChange(2)}
-                  className={`ml-2 text-sm ${
-                    currentStep === 2
-                      ? "text-blue-500"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
-                >
-                  Keperluan
+                  <span className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold
+                    ${currentStep === 2 ? "bg-white text-[#3b9be7]" : "bg-[#e3eafc] text-[#b0b5c3]"}
+                  `}>2</span>
+                  <span className="text-base">Keperluan</span>
                 </button>
               </div>
             </div>
           </div>
         </div>
 
+        {/* Container form */}
         <div className="flex-1 overflow-y-auto">
           <div className="p-4 lg:p-8">
             <div className="max-w-md mx-auto space-y-2">
