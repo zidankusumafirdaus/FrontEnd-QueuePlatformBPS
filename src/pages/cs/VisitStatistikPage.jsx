@@ -191,7 +191,7 @@ const VisitStatistikPage = () => {
               {/* Section Title */}
               <div className="text-center mb-8">
                 <h2 className="text-[#00B4D8] text-xl sm:text-2xl font-bold tracking-wide">
-                  PELAYANAN STATISTIK TERPADU
+                  BADAN PUSAT STATISTIK
                 </h2>
               </div>
 
