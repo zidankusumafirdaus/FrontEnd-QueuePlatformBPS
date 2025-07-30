@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaChartBar, FaUsers, FaSignOutAlt, FaClipboardList, FaDownload, FaChevronLeft, FaBars, FaStar, FaBell, FaCalendarAlt, FaUserCircle, FaCog } from "react-icons/fa";
+import { FaChartBar, FaUsers, FaSignOutAlt, FaClipboardList, FaDownload, FaChevronLeft, FaBars, FaStar, FaBell, FaCalendarAlt, FaUserCircle, FaCog, FaEye } from "react-icons/fa";
 import { LogoutPage } from "../../utils/LogoutPage";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -8,7 +8,9 @@ const navItems = [
   { label: "Semua Tamu", icon: <FaUsers />, path: "/all-guests", tooltip: "Semua Tamu" },
   { label: "Export", icon: <FaDownload />, path: "/weekly-exports", tooltip: "Export" },
   { label: "Log CS", icon: <FaChartBar />, path: "/cslogs-BukuTamu", tooltip: "Log CS" },
+  { label: "Antrian Tamu", icon: <FaEye />, path: "/antrian-tamu", tooltip: "Visit Statistik" }, // ✅ Ini yang ditambahkan
 ];
+
 const bottomNav = [
   { label: "Logout", icon: <FaSignOutAlt />, path: "/logout", tooltip: "Logout", isLogout: true },
 ];
@@ -17,39 +19,43 @@ const SidebarAdmin = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(() => {
-    // Read from localStorage on first render
-    const stored = localStorage.getItem('sidebar-collapsed');
-    return stored === 'true';
+    const stored = localStorage.getItem("sidebar-collapsed");
+    return stored === "true";
   });
   const [menuActive, setMenuActive] = useState(false);
+
   const isActive = (path) => location.pathname === path;
 
-  // Responsive toggler
   const handleSidebarToggle = () => {
     setCollapsed((prev) => {
-      localStorage.setItem('sidebar-collapsed', !prev);
+      localStorage.setItem("sidebar-collapsed", !prev);
       return !prev;
     });
   };
-  // Keep localStorage in sync if collapsed changes elsewhere
+
   useEffect(() => {
-    localStorage.setItem('sidebar-collapsed', collapsed);
+    localStorage.setItem("sidebar-collapsed", collapsed);
   }, [collapsed]);
+
   const handleMenuToggle = () => setMenuActive((prev) => !prev);
 
-  // Logout handler
   const handleLogout = () => LogoutPage(navigate);
 
   return (
     <aside
       className={`transition-all duration-300
-        ${collapsed ? "w-20" : "w-64  "}
+        ${collapsed ? "w-20" : "w-64"}
         bg-white text-gray-800 flex flex-col p-0 shadow-xl rounded-r-2xl border-r border-gray-100 min-h-screen h-full`}
     >
       <div className="flex items-center h-16 px-2 border-b border-gray-100 select-none transition-all duration-300">
         <span
-          className={`text-xl font-bold text-[#00AEEF] tracking-wide whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? 'hidden' : 'opacity-100 w-auto ml-2'}`}
-          style={{ minWidth: collapsed ? 0 : undefined, maxWidth: collapsed ? 0 : 200, display: collapsed ? 'none' : 'inline-block', textAlign: 'left' }}
+          className={`text-xl font-bold text-[#00AEEF] tracking-wide whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? "hidden" : "opacity-100 w-auto ml-2"}`}
+          style={{
+            minWidth: collapsed ? 0 : undefined,
+            maxWidth: collapsed ? 0 : 200,
+            display: collapsed ? "none" : "inline-block",
+            textAlign: "left",
+          }}
         >
           Admin Panel
         </span>
@@ -57,11 +63,14 @@ const SidebarAdmin = () => {
         <div className="flex items-center gap-2 h-full transition-all duration-300">
           <button
             className="toggler sidebar-toggler bg-white border border-gray-200 rounded-lg p-1 shadow hover:bg-blue-50 flex items-center justify-center transition-all duration-300"
-            style={{ height: '40px', width: '40px' }}
+            style={{ height: "40px", width: "40px" }}
             onClick={handleSidebarToggle}
             aria-label="Toggle sidebar"
           >
-            <FaChevronLeft className={`transition-transform duration-300 text-[#00AEEF] ${collapsed ? "rotate-180" : ""}`} size={22} />
+            <FaChevronLeft
+              className={`transition-transform duration-300 text-[#00AEEF] ${collapsed ? "rotate-180" : ""}`}
+              size={22}
+            />
           </button>
         </div>
       </div>
@@ -97,21 +106,21 @@ const SidebarAdmin = () => {
   );
 };
 
-// SidebarNavItem with tooltip
 const SidebarNavItem = ({ icon, label, tooltip, active, collapsed, onClick, isLogout }) => (
   <div className="relative group w-full">
     <button
       onClick={onClick}
       className={`w-full flex items-center py-2 px-5 rounded-lg transition-all duration-300 text-base font-medium
         ${active ? "bg-[#00AEEF] text-white shadow-md" : "hover:bg-blue-50 text-[#00AEEF]"}
-        ${collapsed ? "justify-start" : "gap-3 justify-start"} transition-[justify-content] duration-300"
+        ${collapsed ? "justify-start" : "gap-3 justify-start"} transition-[justify-content] duration-300
         ${isLogout ? "bg-red-50 hover:bg-red-100 text-red-600 mt-2" : ""}`}
       aria-label={label}
     >
       <span className={`text-xl transition-all duration-300 ${active ? "text-white" : isLogout ? "text-red-600" : "text-[#00AEEF]"}`}>{icon}</span>
       <span
         className={`block transition-all duration-300 whitespace-nowrap overflow-hidden
-          ${collapsed ? "opacity-0 w-0 ml-0" : "opacity-100 w-auto ml-2"}`}
+          ${collapsed ? "opacity-0 w-0 ml-0" : "opacity-100 w-auto ml-2"}
+          ${isLogout ? "text-red-600" : ""}`}
         style={{ minWidth: collapsed ? 0 : undefined, maxWidth: collapsed ? 0 : 200 }}
       >
         {label}
