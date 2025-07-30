@@ -112,39 +112,73 @@ const VisitStatistikPage = () => {
       <SidebarAdmin />
 
       {/* Main Content */}
-      <main className="flex-1 flex justify-center items-start overflow-auto p-8">
-        <div className="w-full max-w-4xl">
+      <main className="relative flex-1 flex justify-center items-center p-6 sm:p-10 bg-gray-50 h-screen">
+        {/* Status badge in top-left */}
+        {!loading && visits.length > 0 && currentVisit && (
+          <div className="absolute top-6 left-6">
+            <div
+              className={`inline-flex items-center px-4 py-1.5 rounded-lg text-sm font-medium shadow-md backdrop-blur-sm transition duration-200
+                ${
+                  currentVisit.mark === "hadir"
+                    ? "bg-green-100/80 text-green-700 ring-1 ring-green-300"
+                    : currentVisit.mark === "tidak hadir"
+                    ? "bg-red-100/80 text-red-700 ring-1 ring-red-300"
+                    : "bg-gray-100/80 text-gray-700 ring-1 ring-gray-300"
+                }
+              `}
+            >
+              <div
+                className={`w-2.5 h-2.5 rounded-full mr-2 animate-pulse
+                  ${
+                    currentVisit.mark === "hadir"
+                      ? "bg-green-500"
+                      : currentVisit.mark === "tidak hadir"
+                      ? "bg-red-500"
+                      : "bg-gray-400"
+                  }
+                `}
+              ></div>
+              {currentVisit.mark
+                ? currentVisit.mark.charAt(0).toUpperCase() + currentVisit.mark.slice(1)
+                : "Belum Ditandai"}
+            </div>
+          </div>
+        )}
+
+        <div className="w-full max-w-3xl">
           {loading ? (
-            <p className="text-gray-600 text-lg mt-10">
+            <p className="text-gray-500 text-lg text-center mt-10">
               Memuat data kunjungan...
             </p>
           ) : visits.length === 0 ? (
-            <p className="text-gray-600 text-lg mt-10">
+            <p className="text-gray-500 text-lg text-center mt-10">
               Tidak ada kunjungan hari ini.
             </p>
           ) : (
             <>
-              <div className="grid grid-cols-3 gap-3 mb-8 shadow-sm">
-                <div className="bg-[#00B4D8] rounded-lg p-3">
+              {/* Header Info */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <div className="bg-[#00B4D8] rounded-xl p-4 shadow-md">
                   <p className="text-white text-xs mb-1">Nama</p>
-                  <p className="text-white font-bold text-sm">
+                  <p className="text-white font-semibold text-base truncate">
                     {currentVisit.guest_name}
                   </p>
                 </div>
-                <div className="bg-[#99D98C] rounded-lg p-3">
+                <div className="bg-[#99D98C] rounded-xl p-4 shadow-md">
                   <p className="text-white text-xs mb-1">Tanggal</p>
-                  <p className="text-white font-bold text-sm">{date}</p>
+                  <p className="text-white font-semibold text-base">{date}</p>
                 </div>
-                <div className="bg-[#F77F00] rounded-lg p-3">
+                <div className="bg-[#F77F00] rounded-xl p-4 shadow-md">
                   <p className="text-white text-xs mb-1">Tujuan Kunjungan</p>
-                  <p className="text-white font-bold text-sm break-words">
+                  <p className="text-white font-semibold text-base break-words">
                     {currentVisit.target_service}
                   </p>
                 </div>
               </div>
 
+              {/* Queue Number */}
               <div className="text-center mb-8">
-                <h1 className="text-[#00B4D8] text-2xl font-bold mb-4">
+                <h1 className="text-[#00B4D8] text-2xl font-bold mb-3">
                   NOMOR ANTRIAN
                 </h1>
                 <div className="inline-block rounded-lg p-6">
@@ -154,47 +188,35 @@ const VisitStatistikPage = () => {
                 </div>
               </div>
 
+              {/* Section Title */}
               <div className="text-center mb-8">
-                <h2 className="text-[#00B4D8] text-xl font-bold">
-                  PELAYANAN STATISTIK
+                <h2 className="text-[#00B4D8] text-xl sm:text-2xl font-bold tracking-wide">
+                  PELAYANAN STATISTIK TERPADU
                 </h2>
-                <h2 className="text-[#00B4D8] text-xl font-bold">TERPADU</h2>
               </div>
 
+              {/* Purpose / Notes */}
               {currentVisit.purpose && (
-                <div className="bg-[#FFF3CD] rounded-lg p-4 mb-6">
+                <div className="bg-[#FFF3CD] rounded-lg p-4 mb-6 border border-[#ffeeba] shadow-sm">
                   <h3 className="text-[#856404] font-medium mb-2 text-sm">
                     Catatan Pengunjung :
                   </h3>
                   <div className="bg-white rounded-lg p-3">
-                    <p className="text-[#856404] text-sm">
+                    <p className="text-[#856404] text-sm leading-relaxed">
                       {currentVisit.purpose}
                     </p>
                   </div>
                 </div>
               )}
 
-              <div className="text-center mb-6">
-                <p
-                  className={`font-semibold text-sm ${
-                    currentVisit.mark === "hadir"
-                      ? "text-green-600"
-                      : "text-red-600"
-                  }`}
-                >
-                  Status:{" "}
-                  {currentVisit.mark.charAt(0).toUpperCase() +
-                    currentVisit.mark.slice(1)}
-                </p>
-              </div>
-
-              <div className="flex justify-between items-center gap-3">
+              {/* Navigation Buttons */}
+              <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
                 <button
                   onClick={prevVisit}
                   disabled={currentIndex === 0}
-                  className={`flex-1 px-4 py-2 rounded-md ${
+                  className={`w-full sm:w-auto px-4 py-2 rounded-md font-medium transition ${
                     currentIndex === 0
-                      ? "bg-gray-300 cursor-not-allowed"
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                       : "bg-blue-500 text-white hover:bg-blue-600"
                   }`}
                 >
@@ -204,7 +226,7 @@ const VisitStatistikPage = () => {
                 {currentVisit.mark !== "hadir" && (
                   <button
                     onClick={() => handleToggleMark(currentVisit)}
-                    className="flex-1 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                    className="w-full sm:w-auto px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition font-medium"
                   >
                     Tandai Hadir
                   </button>
@@ -213,9 +235,9 @@ const VisitStatistikPage = () => {
                 <button
                   onClick={nextVisit}
                   disabled={currentIndex === visits.length - 1}
-                  className={`flex-1 px-4 py-2 rounded-md ${
+                  className={`w-full sm:w-auto px-4 py-2 rounded-md font-medium transition ${
                     currentIndex === visits.length - 1
-                      ? "bg-gray-300 cursor-not-allowed"
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                       : "bg-blue-500 text-white hover:bg-blue-600"
                   }`}
                 >
@@ -223,7 +245,8 @@ const VisitStatistikPage = () => {
                 </button>
               </div>
 
-              <p className="mt-4 text-center text-sm text-gray-500">
+              {/* Index Footer */}
+              <p className="mt-6 text-center text-sm text-gray-500">
                 {currentIndex + 1} dari {visits.length} kunjungan hari ini
               </p>
             </>
