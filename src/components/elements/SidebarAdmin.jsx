@@ -43,13 +43,13 @@ const SidebarAdmin = () => {
 
   return (
     <aside
-      className={`transition-all duration-300
+      className={`transition-all duration-300 font-poppins
         ${collapsed ? "w-20" : "w-64"}
         bg-white text-gray-800 flex flex-col p-0 shadow-xl rounded-r-2xl border-r border-gray-100 min-h-screen h-full`}
     >
       <div className="flex items-center h-16 px-2 border-b border-gray-100 select-none transition-all duration-300">
         <span
-          className={`text-xl font-bold text-[#00AEEF] tracking-wide whitespace-nowrap overflow-hidden transition-all duration-300 ${collapsed ? "hidden" : "opacity-100 w-auto ml-2"}`}
+          className={`text-xl font-bold text-[#00AEEF] tracking-wide whitespace-nowrap overflow-hidden transition-all duration-300 font-poppins ${collapsed ? "hidden" : "opacity-100 w-auto ml-2"}`}
           style={{
             minWidth: collapsed ? 0 : undefined,
             maxWidth: collapsed ? 0 : 200,
@@ -90,6 +90,8 @@ const SidebarAdmin = () => {
         ))}
       </nav>
 
+      {/* Separator */}
+      <div className="border-t border-gray-200 mx-4 my-2" />
       {/* Bottom nav */}
       <div className={`px-2 pb-4 ${collapsed ? "items-start flex flex-col" : ""}`}>
         <SidebarNavItem
@@ -107,10 +109,10 @@ const SidebarAdmin = () => {
 };
 
 const SidebarNavItem = ({ icon, label, tooltip, active, collapsed, onClick, isLogout }) => (
-  <div className="relative group w-full">
+  <div className="relative group w-full" >
     <button
       onClick={onClick}
-      className={`w-full flex items-center py-2 px-5 rounded-lg transition-all duration-300 text-base font-medium
+      className={`w-full flex items-center py-2 px-5 rounded-lg transition-all duration-300 text-base font-medium font-poppins
         ${active ? "bg-[#00AEEF] text-white shadow-md" : "hover:bg-blue-50 text-[#00AEEF]"}
         ${collapsed ? "justify-start" : "gap-3 justify-start"} transition-[justify-content] duration-300
         ${isLogout ? "bg-red-50 hover:bg-red-100 text-red-600 mt-2" : ""}`}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getVisitByCategory, getAllGuests, updateVisit } from "../../service/api/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import SidebarAdmin from "../../components/export/SidebarAdmin";
+import SidebarAdmin from "../../components/elements/SidebarAdmin";
 
 const VisitStatistikPage = () => {
   const [visits, setVisits] = useState([]);

@@ -5,7 +5,7 @@ import { FaChartBar, FaUsers, FaSignOutAlt, FaClipboardList, FaDownload } from '
 // Importing from service, utils & components
 import { getCSLogs } from "../../service/api/api";
 import ExportLogButton from "../../components/export/ExportLogButton";
-import SidebarAdmin from "../../components/export/SidebarAdmin";
+import SidebarAdmin from "../../components/elements/SidebarAdmin";
 
 const CSLogs = () => {
   const [logs, setLogs] = useState([]);
@@ -47,11 +47,11 @@ const CSLogs = () => {
 }, [navigate]);
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100 font-poppins">
       {/* Navigation */}
       <SidebarAdmin />
       {/* Main Content */}
-      <main className="flex-1 overflow-auto p-8">
+      <main className="flex-1 overflow-auto p-8 font-poppins">
         <h1 className="text-4xl font-bold mb-6 text-gray-800">Log Aktivitas Customer Service</h1>
         <section className="bg-white p-6 rounded-lg shadow-md mb-8">
           <div className="flex space-x-4">
