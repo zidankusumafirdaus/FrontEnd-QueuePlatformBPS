@@ -18,7 +18,7 @@ const QueueNumber = () => {
     <div className="min-h-screen bg-white flex flex-col justify-center">
       {/* Mobile Logo */}
       <div className="lg:hidden bg-white flex justify-center items-center py-4 px-4">
-        <img src={logo_bps} alt="Logo BPS" className="w-64 h-auto" />
+        <img src={logo_bps} alt="Logo BPS" className="w-48 h-auto" />
       </div>
 
       {/* Main Content */}
@@ -26,7 +26,7 @@ const QueueNumber = () => {
         {/* Desktop Logo */}
         <div className="hidden lg:flex bg-white flex-col items-center justify-center p-16">
           <div className="mb-6">
-            <img src={logo_bps} alt="Logo BPS" className="w-64 md:w-56 lg:w-80 xl:w-64" />
+            <img src={logo_bps} alt="Logo BPS" className="w-64 md:w-56 lg:w-96 xl:w-96" />
           </div>
         </div>
 
