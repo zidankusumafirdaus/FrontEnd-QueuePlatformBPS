@@ -22,7 +22,7 @@ const QueueNumber = () => {
       </div>
 
       {/* Main Content */}
-      <div className="w-full max-w-6xl flex object-center">
+      <div className="max-w-6xl flex object-center mx-auto w-full">
         {/* Desktop Logo */}
         <div className="hidden lg:flex bg-white flex-col items-center justify-center p-16">
           <div className="mb-6">
