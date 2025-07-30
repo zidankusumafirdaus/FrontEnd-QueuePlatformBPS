@@ -24,14 +24,14 @@ const QueueNumber = () => {
       {/* Main Content */}
       <div className="w-full max-w-6xl flex object-center">
         {/* Desktop Logo */}
-        <div className="hidden lg:flex lg:w-1/3 bg-white flex-col items-center justify-center p-6">
+        <div className="hidden lg:flex bg-white flex-col items-center justify-center p-16">
           <div className="mb-6">
-            <img src={logo_bps} alt="Logo BPS" className="w-32 md:w-56 lg:w-80 xl:w-64" />
+            <img src={logo_bps} alt="Logo BPS" className="w-64 md:w-56 lg:w-80 xl:w-64" />
           </div>
         </div>
 
         {/* Queue Content */}
-         <div className="flex-1 lg:w-2/3 p-4 lg:p-8 lg:pl-40 lg:pr-1 flex flex-col justify-center">
+         <div className="flex-1 lg:w-2/3 p-4 lg:p-8 lg:pr-1 flex flex-col justify-center">
           {/* Info Cards */}
           <div className="grid grid-cols-3 gap-3 mb-8 shadow-sm">
             <div className="bg-[#00B4D8] rounded-lg p-3">
