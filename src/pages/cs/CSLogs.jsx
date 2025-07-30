@@ -4,8 +4,8 @@ import { FaChartBar, FaUsers, FaSignOutAlt, FaClipboardList, FaDownload } from '
 
 // Importing from service, utils & components
 import { getCSLogs } from "../../service/api/api";
-import { LogoutPage } from "../../utils/LogoutPage";
 import ExportLogButton from "../../components/export/ExportLogButton";
+import SidebarAdmin from "../../components/elements/SidebarAdmin";
 
 const CSLogs = () => {
   const [logs, setLogs] = useState([]);
@@ -49,68 +49,7 @@ const CSLogs = () => {
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Navigation */}
-      <aside className="w-64 bg-gray-800 text-white flex flex-col p-4 shadow-lg">
-        <div className="mb-8 pt-3 text-center">
-          <span className="text-3xl font-bold text-white">Admin Panel</span>
-        </div>
-
-        <nav className="space-y-4">
-          <button
-            onClick={() => navigate("/visit-guest")}
-            className={`
-              w-full text-left py-2 px-4 rounded-md transition-colors duration-200 flex items-center space-x-3
-              ${isActive("/visit-guest") ? "bg-gray-700 text-white font-bold" : "hover:bg-gray-700 text-gray-300"}
-            `}
-          >
-            <FaClipboardList className="text-xl" />
-            <span>Data Kunjungan</span>
-          </button>
-          
-          <button
-            onClick={() => navigate("/all-guests")}
-            className={`
-              w-full text-left py-2 px-4 rounded-md transition-colors duration-200 flex items-center space-x-3
-              ${isActive("/all-guests") ? "bg-gray-700 text-white font-bold" : "hover:bg-gray-700 text-gray-300"}
-            `}
-          >
-            <FaUsers className="text-xl" />
-            <span>Semua Tamu</span>
-          </button>
-
-          <button
-            onClick={() => navigate("/weekly-exports")}
-            className={`
-                w-full text-left py-2 px-4 rounded-md flex items-center space-x-3 transition-colors
-                ${isActive("/weekly-exports") ? "bg-gray-700 font-bold" : "hover:bg-gray-700 text-gray-300"}
-            `}
-            >
-            <FaDownload className="text-xl" />
-            <span>Export</span>
-          </button>
-
-          <button
-            onClick={() => navigate("/cslogs-BukuTamu")}
-            className={`
-              w-full text-left py-2 px-4 rounded-md transition-colors duration-200 flex items-center space-x-3
-              ${isActive("/cslogs-BukuTamu") ? "bg-gray-700 text-white font-bold" : "hover:bg-gray-700 text-gray-300"}
-            `}
-          >
-            <FaChartBar className="text-xl" />
-            <span>Log CS</span>
-          </button>
-        </nav>
-
-        <div className="mt-auto pt-4 border-t border-gray-700">
-          <button
-            onClick={() => LogoutPage(navigate)}
-            className="w-full text-left py-2 px-4 rounded-md bg-red-600 hover:bg-red-700 transition-colors duration-200 flex items-center space-x-3"
-          >
-            <FaSignOutAlt className="text-xl" />
-            <span>Logout</span>
-          </button>
-        </div>
-      </aside>
-
+      <SidebarAdmin />
       {/* Main Content */}
       <main className="flex-1 overflow-auto p-8">
         <h1 className="text-4xl font-bold mb-6 text-gray-800">Log Aktivitas Customer Service</h1>
