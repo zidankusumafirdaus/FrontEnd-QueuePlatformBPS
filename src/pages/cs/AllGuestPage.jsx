@@ -9,7 +9,7 @@ import { getAllGuests } from "../../service/api/api";
 import { DeleteGuest } from "../../utils/DeleteGuest";
 import ConfirmModal from "../../components/guest/ConfirmModal";
 import ExportGuestButton from "../../components/export/ExportGuestButton";
-import SidebarAdmin from "../../components/export/SidebarAdmin";
+import SidebarAdmin from "../../components/elements/SidebarAdmin";
 
 
 const GuestListPage = () => {
@@ -66,10 +66,10 @@ const GuestListPage = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100 font-poppins">
       <SidebarAdmin />
-      <main className="flex-1 overflow-auto p-8">
-        <h1 className="text-4xl font-bold mb-6 text-gray-800">Data Semua Tamu</h1>
+      <main className="flex-1 overflow-auto p-8 font-poppins">
+        <h1 className="text-4xl font-poppins font-bold mb-6 text-gray-800">Data Semua Tamu</h1>
         <section className="bg-white p-6 rounded-lg shadow-md mb-8">
           <div className="flex space-x-4">
             <ExportGuestButton />

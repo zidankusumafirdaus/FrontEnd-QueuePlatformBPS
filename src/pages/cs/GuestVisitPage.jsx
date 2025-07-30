@@ -7,7 +7,7 @@ import { ResetQueue } from "../../utils/ResetQueue";
 import { ResetDatabase } from "../../utils/ResetDatabase";
 import VisitTable from "../../components/visit/VisitTable";
 import ExportVisitButton from "../../components/export/ExportVisitButton";
-import SidebarAdmin from "../../components/export/SidebarAdmin";
+import SidebarAdmin from "../../components/elements/SidebarAdmin";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
