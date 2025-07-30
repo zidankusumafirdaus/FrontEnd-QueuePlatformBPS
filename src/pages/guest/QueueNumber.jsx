@@ -26,50 +26,85 @@ const QueueNumber = () => {
         {/* Desktop Logo */}
         <div className="hidden lg:flex bg-white flex-col items-center justify-center p-16">
           <div className="mb-6">
-            <img src={logo_bps} alt="Logo BPS" className="w-64 md:w-72 lg:w-96 xl:w-96" />
+            <img
+              src={logo_bps}
+              alt="Logo BPS"
+              className="w-64 md:w-72 lg:w-96 xl:w-96"
+            />
           </div>
         </div>
 
         {/* Queue Content */}
-         <div className="flex-1 lg:w-2/3 p-4 lg:p-8 lg:pr-1 flex flex-col justify-center">
+        <div className="flex-1 p-4 lg:p-8 flex flex-col justify-center">
           {/* Info Cards */}
-          <div className="grid grid-cols-3 gap-3 mb-8 shadow-sm">
-            <div className="bg-[#00B4D8] rounded-lg p-3">
-              <p className="text-white text-xs mb-1">Nama</p>
-              <p className="text-white font-bold text-sm">{guest_name}</p>
-            </div>
-            <div className="bg-[#99D98C] rounded-lg p-3">
-              <p className="text-white text-xs mb-1">Tanggal</p>
-              <p className="text-white font-bold text-sm">{date}</p>
-            </div>
-            <div className="bg-[#F77F00] rounded-lg p-3">
-              <p className="text-white text-xs mb-1">Tujuan Kunjungan</p>
-              <p className="text-white font-bold text-sm break-words">
-                {target_service}
-              </p>
-            </div>
-          </div>
+          <div className="flex flex-col gap-3 mb-8">
+            {/* Header */}
 
-          {/* Queue Number */}
-          <div className="text-center mb-8">
-            <h1 className="text-[#00B4D8] text-2xl font-bold mb-4">
-              NOMOR ANTRIAN
-            </h1>
-            <div className="inline-block rounded-lg p-6">
-              <span className="text-[#00B4D8] text-6xl font-bold">
-                <p>
-                  {queue_number}
+            {/* Cards Container - Mobile */}
+            <div className="bg-Abu rounded-xl p-4 shadow-super lg:hidden">
+              <div className="flex flex-col space-y-4">
+                {/* Nama dan Tanggal - 2 kolom */}
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Nama */}
+                  <div>
+                    <div className="bg-[#00B4D8] inline-block px-3 py-1 rounded-md">
+                      <p className="text-white text-sm">Nama</p>
+                    </div>
+                    <p className="mt-1 text-gray-800 font-medium">
+                      {guest_name}
+                    </p>
+                  </div>
+
+                  {/* Tanggal */}
+                  <div>
+                    <div className="bg-[#99D98C] inline-block px-3 py-1 rounded-md">
+                      <p className="text-white text-sm">Tanggal</p>
+                    </div>
+                    <p className="mt-1 text-gray-800 font-medium">{date}</p>
+                  </div>
+                </div>
+
+                {/* Tujuan - Full width */}
+                <div>
+                  <div className="bg-[#F77F00] inline-block px-3 py-1 rounded-md">
+                    <p className="text-white text-sm">Tujuan Kunjungan</p>
+                  </div>
+                  <p className="mt-1 text-gray-800 font-medium break-words">
+                    {target_service}
                   </p>
-              </span>
+                </div>
+              </div>
             </div>
-          </div>
 
-          {/* Service Type */}
-          <div className="text-center mb-8">
-            <h2 className="text-[#00B4D8] text-xl font-bold">
-              PELAYANAN STATISTIK
-            </h2>
-            <h2 className="text-[#00B4D8] text-xl font-bold">TERPADU</h2>
+            {/* Cards Container - Desktop */}
+            <div className="hidden lg:grid grid-cols-3 gap-3 mb-8 shadow-sm">
+              <div className="bg-[#00B4D8] rounded-lg p-3">
+                <p className="text-white text-xs mb-1">Nama</p>
+                <p className="text-white font-bold text-sm">{guest_name}</p>
+              </div>
+              <div className="bg-[#99D98C] rounded-lg p-3">
+                <p className="text-white text-xs mb-1">Tanggal</p>
+                <p className="text-white font-bold text-sm">{date}</p>
+              </div>
+              <div className="bg-[#F77F00] rounded-lg p-3">
+                <p className="text-white text-xs mb-1">Tujuan Kunjungan</p>
+                <p className="text-white font-bold text-sm break-words">
+                  {target_service}
+                </p>
+              </div>
+            </div>
+
+            {/* Queue Number */}
+            <div className="text-center mb-8 mt-10">
+              <h1 className="text-[#00B4D8] text-2xl font-bold mb-1">
+                NOMOR ANTRIAN
+              </h1>
+              <div className="inline-block rounded-lg p-6">
+                <span className="text-[#00B4D8] text-6xl font-bold">
+                  <p>{queue_number}</p>
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* Notes Section */}
