@@ -22,7 +22,11 @@ export default {
         Biru: "#00AEEF",
         Gray: "#EBF1FF",
         GrayGelap: "#BDC4DE",
-      }
+        Abu: "#F8F8F8",
+      },
+      boxShadow: {
+        'super': '0 10px 20px rgba(0, 0, 0, 0.2)',
+      },
     },
   },
   plugins: [],
