@@ -10,20 +10,22 @@ const HomePage = () => {
   return (
     <div className="relative w-full overflow-hidden font-poppins" style={{ height: '100vh', maxHeight: '100vh' }}>
       <img
-      src={HomeBPS}
-      alt="BPS Sidoarjo"
-      className="w-full h-full object-cover object-[68%_center] sm:object-center"
+        src={HomeBPS}
+        alt="BPS Sidoarjo"
+        className="w-full h-full object-cover object-[68%_center] sm:object-center"
       />
 
       {/* LOGIN */}
-      {/* <div className="absolute top-4 right-4 pt-8 sm:top-10 sm:right-6">
+      {/* 
+      <div className="absolute top-4 right-4 pt-8 sm:top-10 sm:right-6">
         <button
           onClick={() => navigate('/login-BukuTamu')}
-          className="bg-white text-black px-4 py-1 sm:px-5 sm:py-2 text-sm sm:text-base rounded-full shadow-md hover:bg-gray-100 transition"
+          className="bg-white text-black px-4 py-1 sm:px-5 sm:py-2 text-sm sm:text-base rounded-full shadow-md hover:bg-gray-100 hover:scale-105 transition-transform duration-200"
         >
           Login
         </button>
-      </div> */}
+      </div> 
+      */}
 
       <div className="absolute bottom-0 w-full bg-gradient-to-t from-BiruTerang to-transparent pt-32 sm:pt-48 pb-14 px-6 sm:px-12">
         <div className="text-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -38,7 +40,7 @@ const HomePage = () => {
 
           <button
             onClick={() => navigate('/form-biodata')}
-            className="hidden sm:flex bg-white rounded-full p-3 shadow-md"
+            className="hidden sm:flex bg-white rounded-full p-3 shadow-md hover:bg-gray-200 hover:scale-105 transition-transform duration-200"
           >
             <ArrowRight className="w-10 h-10 text-black" />
           </button>
@@ -47,7 +49,7 @@ const HomePage = () => {
 
       <button
         onClick={() => navigate('/form-biodata')}
-        className="sm:hidden absolute bottom-6 right-6 bg-white rounded-full p-3 shadow-md"
+        className="sm:hidden absolute bottom-6 right-6 bg-white rounded-full p-3 shadow-md hover:bg-gray-200 hover:scale-105 transition-transform duration-200"
       >
         <ArrowRight className="w-6 h-6 text-black" />
       </button>
