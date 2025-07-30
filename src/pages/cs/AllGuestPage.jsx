@@ -9,7 +9,7 @@ import { getAllGuests } from "../../service/api/api";
 import { DeleteGuest } from "../../utils/DeleteGuest";
 import ConfirmModal from "../../components/guest/ConfirmModal";
 import ExportGuestButton from "../../components/export/ExportGuestButton";
-import SidebarAdmin from "../../components/elements/SidebarAdmin";
+import SidebarAdmin from "../../components/export/SidebarAdmin";
 
 
 const GuestListPage = () => {

@@ -5,7 +5,7 @@ import { FaChartBar, FaUsers, FaSignOutAlt, FaClipboardList, FaDownload } from '
 // Importing from service, utils & components
 import { getCSLogs } from "../../service/api/api";
 import ExportLogButton from "../../components/export/ExportLogButton";
-import SidebarAdmin from "../../components/elements/SidebarAdmin";
+import SidebarAdmin from "../../components/export/SidebarAdmin";
 
 const CSLogs = () => {
   const [logs, setLogs] = useState([]);
