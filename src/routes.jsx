@@ -16,12 +16,12 @@ import QueueKunjunganDinas from './pages/guest/QueueKunjunganDinas';
 import WeeklyAutoExport from './pages/cs/WeeklyAutoExport';
 import VisitStatistikPage from './pages/cs/VisitStatistikPage';
 
-// Error components
+// Error pages
 import ErrorHandlers from './utils/ErrorHandlers';
-import NotFound from './components/error/404';
-import Error403 from './components/error/403';
-import Error405 from './components/error/405';
-import Error500 from './components/error/500';
+import NotFound from './pages/error/404';
+import Error403 from './pages/error/403';
+import Error405 from './pages/error/405';
+import Error500 from './pages/error/500';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
