@@ -66,64 +66,67 @@ const GuestListPage = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100 font-poppins">
+    <div className="flex h-screen bg-[#F5F8FA] font-poppins">
       <SidebarAdmin />
       <main className="flex-1 overflow-auto p-8 font-poppins">
-        <h1 className="text-4xl font-poppins font-bold mb-6 text-gray-800">Data Semua Tamu</h1>
-        <section className="bg-white p-6 rounded-lg shadow-md mb-8">
-          <div className="flex space-x-4">
-            <ExportGuestButton />
-          </div>
+        <h1 className="text-4xl font-bold mb-8 text-[#00AEEF] drop-shadow-sm">Data Semua Tamu</h1>
+        <section className="bg-white p-6 rounded-2xl shadow-lg mb-10 flex items-center justify-between">
+          <span className="text-lg font-semibold text-[#8DC63F]">Export Data Tamu</span>
+          <ExportGuestButton />
         </section>
         {loading ? (
           <div className="flex justify-center py-10">
-            <p className="text-gray-600 text-lg">Memuat data tamu...</p>
+            <p className="text-[#00AEEF] text-lg font-semibold animate-pulse">Memuat data tamu...</p>
           </div>
         ) : error ? (
           <div className="flex justify-center py-10">
-            <p className="text-red-600 text-lg font-medium">{error}</p>
+            <p className="text-[#F7941D] text-lg font-semibold">{error}</p>
           </div>
         ) : (
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          <div className="bg-white p-6 rounded-2xl shadow-lg">
             <div className="overflow-x-auto">
               {guests.length === 0 ? (
-                <div className="text-center py-8 text-gray-500 text-base">
+                <div className="text-center py-8 text-gray-400 text-base font-medium">
                   Tidak ada data tamu yang tersedia.
                 </div>
               ) : (
                 <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-[#00AEEF]/10">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gender</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis Identitas</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nomor Identitas</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Instansi</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telepon</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-[#00AEEF] uppercase tracking-wider">Nama</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-[#00AEEF] uppercase tracking-wider">Email</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-[#00AEEF] uppercase tracking-wider">Gender</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-[#00AEEF] uppercase tracking-wider">Jenis Identitas</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-[#00AEEF] uppercase tracking-wider">Nomor Identitas</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-[#00AEEF] uppercase tracking-wider">Instansi</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-[#00AEEF] uppercase tracking-wider">Telepon</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-[#ff4444] uppercase tracking-wider">Aksi</th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="bg-white divide-y divide-gray-100">
                     {guests.map((guest) => (
-                      <tr key={guest.guest_id} className="hover:bg-gray-50 transition">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{guest.guest_name}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{guest.email}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{guest.gender}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{guest.identity_type}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{guest.identity_number}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{guest.institution}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{guest.phone}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <tr key={guest.guest_id} className="hover:bg-[#00AEEF]/5 transition">
+                        <td className="px-6 py-4 whitespace-nowrap text-xs text-[#222] font-normal">{guest.guest_name}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xs text-[#222]">{guest.email}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xs text-[#222]">{guest.gender}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xs text-[#222]">{guest.identity_type}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xs text-[#222]">{guest.identity_number}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xs text-[#8DC63F] font-semibold">{guest.institution}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xs text-[#222]">{guest.phone}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xs font-semibold flex gap-2 items-center">
                           <button
                             onClick={() => {
                               setSelectedGuestId(guest.guest_id);
                               setShowConfirm(true);
                             }}
-                            className="px-3 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded-md transition"
+                            className="px-3 py-2 text-sm bg-[#F87171] hover:bg-[#ff4444] text-white rounded-md transition font-bold shadow"
+                            title="Hapus Tamu"
                           >
                             <FaTrashAlt />
                           </button>
+                          {guest.status === 'tidak hadir' && (
+                            <span className="text-[#F87171] bg-[#FEE2E2] px-2 py-1 rounded text-xs font-medium">Tidak Hadir</span>
+                          )}
                         </td>
                       </tr>
                     ))}
