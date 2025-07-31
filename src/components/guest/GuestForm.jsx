@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo_bps from "../../assets/logo_bps.png";
 import { createGuest, getGuestById, getVisits } from "../../service/api/api.js";
@@ -8,6 +8,8 @@ import PersonalInfoStep from "./PersonalInfoStep";
 import PurposeStep from "./PurposeStep";
 
 const GuestForm = () => {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     email: "",
     guest_name: "",
@@ -24,7 +26,81 @@ const GuestForm = () => {
 
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const [checkingPreviousSubmission, setCheckingPreviousSubmission] =
+    useState(true);
+
+  useEffect(() => {
+    const checkPreviousSubmission = async () => {
+      const guestId = localStorage.getItem("last_guest_id");
+      const targetService = localStorage.getItem("last_target_service");
+
+      if (!guestId) {
+        setCheckingPreviousSubmission(false);
+        return;
+      }
+
+      try {
+        const guestRes = await getGuestById(guestId);
+        const guest_name = guestRes.data.guest_name;
+
+        const visitsRes = await getVisits();
+        const allVisits = visitsRes.data;
+
+        // Ambil kunjungan terakhir dari guest
+        const guestVisits = allVisits.filter(
+          (v) => v.guest_id === parseInt(guestId)
+        );
+        guestVisits.sort(
+          (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+        );
+        const thisVisit = guestVisits[0];
+
+        if (!thisVisit) {
+          setCheckingPreviousSubmission(false);
+          return;
+        }
+
+        if (thisVisit.mark !== "hadir") {
+          const { queue_number, timestamp, purpose } = thisVisit;
+
+          const stateData = {
+            guest_name,
+            target_service: targetService,
+            queue_number,
+            timestamp,
+            purpose,
+          };
+
+          if (
+            targetService === "Kunjungan Dinas" ||
+            targetService === "other"
+          ) {
+            navigate("/queue-kunjungan-dinas", {
+              state: stateData,
+              replace: true,
+            });
+          } else {
+            navigate("/nomor-antrian", {
+              state: stateData,
+              replace: true,
+            });
+          }
+          return;
+        } else {
+          localStorage.removeItem("last_guest_id");
+          localStorage.removeItem("last_target_service");
+        }
+      } catch (err) {
+        console.error("Gagal memeriksa status sebelumnya:", err);
+      } finally {
+        setCheckingPreviousSubmission(false);
+      }
+    };
+
+    checkPreviousSubmission();
+  }, [navigate]);
+
+  if (checkingPreviousSubmission) return null;
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -60,6 +136,9 @@ const GuestForm = () => {
       // Step 1: Submit form dengan data yang sudah dimodifikasi
       const res = await createGuest(submitData);
       const guest_id = res.data.guest_id;
+
+      localStorage.setItem("last_guest_id", guest_id);
+      localStorage.setItem("last_target_service", submitData.target_service);
 
       // Step 2: Get guest details by ID
       const guestRes = await getGuestById(guest_id);
