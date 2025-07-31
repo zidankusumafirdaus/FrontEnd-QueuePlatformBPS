@@ -1,99 +1,98 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getVisitByCategory, getAllGuests, updateVisit } from "../../service/api/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SidebarAdmin from "../../components/elements/SidebarAdmin";
 
 const VisitStatistikPage = () => {
-  const [visits, setVisits] = useState([]);
-  const [guestMap, setGuestMap] = useState({});
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [visitRes, guestRes] = await Promise.all([
-          getVisitByCategory(),
-          getAllGuests(),
-        ]);
+  const {
+    data: visitData = {},
+    isLoading: loadingVisits,
+  } = useQuery({
+    queryKey: ["visitsByCategory"],
+    queryFn: async () => {
+      const res = await getVisitByCategory();
+      return res.data;
+    },
+    staleTime: 1000 * 60 * 2,
+  });
 
-        const kategoriKey = Object.keys(visitRes?.data || {}).find(
-          (key) => key.toLowerCase() === "pelayanan statistik terpadu"
-        );
-        const categoryData = kategoriKey ? visitRes.data[kategoriKey] : [];
+  const {
+    data: guests = [],
+    isLoading: loadingGuests,
+  } = useQuery({
+    queryKey: ["allGuests"],
+    queryFn: async () => {
+      const res = await getAllGuests();
+      return res.data;
+    },
+    staleTime: 1000 * 60 * 5,
+  });
 
-        const map = {};
-        (guestRes?.data || []).forEach((g) => {
-          map[g.guest_id] = g.guest_name;
-        });
-        setGuestMap(map);
+  const guestMap = useMemo(() => {
+    const map = {};
+    guests.forEach((g) => {
+      map[g.guest_id] = g.guest_name;
+    });
+    return map;
+  }, [guests]);
 
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const visitsWithGuest = categoryData
-          .map((v) => ({
-            ...v,
-            guest_name: map[v.guest_id] || "Tamu Tidak Diketahui",
-            dateOnly: new Date(new Date(v.timestamp).setHours(0, 0, 0, 0)),
-          }))
-          .filter(
-            (v) =>
-              v.dateOnly.getTime() === today.getTime() &&
-              v.queue_number != null &&
-              v.queue_number !== ""
-          )
-          .sort(
-            (a, b) => parseInt(a.queue_number) - parseInt(b.queue_number)
-          );
-
-        setVisits(visitsWithGuest);
-        setCurrentIndex(0);
-      } catch (error) {
-        console.error("Gagal mengambil data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+  const today = useMemo(() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
   }, []);
+
+  const visits = useMemo(() => {
+    const categoryKey = Object.keys(visitData).find(
+      (key) => key.toLowerCase() === "pelayanan statistik terpadu"
+    );
+    const data = categoryKey ? visitData[categoryKey] : [];
+
+    return data
+      .map((v) => ({
+        ...v,
+        guest_name: guestMap[v.guest_id] || "Tamu Tidak Diketahui",
+        dateOnly: new Date(new Date(v.timestamp).setHours(0, 0, 0, 0)),
+      }))
+      .filter(
+        (v) =>
+          v.dateOnly.getTime() === today.getTime() &&
+          v.queue_number !== null &&
+          v.queue_number !== ""
+      )
+      .sort((a, b) => parseInt(a.queue_number) - parseInt(b.queue_number));
+  }, [visitData, guestMap, today]);
 
   const handleToggleMark = async (visit) => {
     const token = localStorage.getItem("token");
     const newMark = "hadir";
-    const originalMark = visit.mark;
 
-    setVisits((prev) =>
-      prev.map((v) =>
-        v.visit_id === visit.visit_id ? { ...v, mark: newMark } : v
-      )
-    );
+    const previousVisits = [...visits];
+
+    // Optimistic update
+    queryClient.setQueryData(["visitsByCategory"], (old) => {
+      const updated = { ...old };
+      for (const cat in updated) {
+        updated[cat] = updated[cat].map((v) =>
+          v.visit_id === visit.visit_id ? { ...v, mark: newMark } : v
+        );
+      }
+      return updated;
+    });
 
     try {
       await updateVisit(visit.visit_id, { mark: newMark }, token);
       toast.success(`Tamu "${visit.guest_name}" telah ditandai hadir.`);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
       toast.error(`Gagal menandai kehadiran tamu "${visit.guest_name}".`);
-      setVisits((prev) =>
-        prev.map((v) =>
-          v.visit_id === visit.visit_id ? { ...v, mark: originalMark } : v
-        )
-      );
-    }
-  };
-
-  const nextVisit = () => {
-    if (currentIndex < visits.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
-  };
-
-  const prevVisit = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
+      queryClient.setQueryData(["visitsByCategory"], (old) => {
+        return previousVisits;
+      });
     }
   };
 
@@ -108,13 +107,10 @@ const VisitStatistikPage = () => {
 
   return (
     <div className="flex h-screen bg-white">
-      {/* Sidebar */}
       <SidebarAdmin />
 
-      {/* Main Content */}
       <main className="relative flex-1 flex justify-center items-center p-6 sm:p-10 bg-gray-50 h-screen">
-        {/* Status badge in top-left */}
-        {!loading && visits.length > 0 && currentVisit && (
+        {!loadingVisits && !loadingGuests && visits.length > 0 && currentVisit && (
           <div className="absolute top-6 left-6">
             <div
               className={`inline-flex items-center px-4 py-1.5 rounded-lg text-sm font-medium shadow-md backdrop-blur-sm transition duration-200
@@ -146,7 +142,7 @@ const VisitStatistikPage = () => {
         )}
 
         <div className="w-full max-w-3xl">
-          {loading ? (
+          {loadingVisits || loadingGuests ? (
             <p className="text-gray-500 text-lg text-center mt-10">
               Memuat data kunjungan...
             </p>
@@ -156,7 +152,6 @@ const VisitStatistikPage = () => {
             </p>
           ) : (
             <>
-              {/* Header Info */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                 <div className="bg-[#00B4D8] rounded-xl p-4 shadow-md">
                   <p className="text-white text-xs mb-1">Nama</p>
@@ -176,11 +171,8 @@ const VisitStatistikPage = () => {
                 </div>
               </div>
 
-              {/* Queue Number */}
               <div className="text-center mb-8">
-                <h1 className="text-[#00B4D8] text-2xl font-bold mb-3">
-                  NOMOR ANTRIAN
-                </h1>
+                <h1 className="text-[#00B4D8] text-2xl font-bold mb-3">NOMOR ANTRIAN</h1>
                 <div className="inline-block rounded-lg p-6">
                   <span className="text-[#00B4D8] text-6xl font-bold">
                     {currentVisit.queue_number}
@@ -188,14 +180,12 @@ const VisitStatistikPage = () => {
                 </div>
               </div>
 
-              {/* Section Title */}
               <div className="text-center mb-8">
                 <h2 className="text-[#00B4D8] text-xl sm:text-2xl font-bold tracking-wide">
                   BADAN PUSAT STATISTIK
                 </h2>
               </div>
 
-              {/* Purpose / Notes */}
               {currentVisit.purpose && (
                 <div className="bg-[#FFF3CD] rounded-lg p-4 mb-6 border border-[#ffeeba] shadow-sm">
                   <h3 className="text-[#856404] font-medium mb-2 text-sm">
@@ -209,10 +199,9 @@ const VisitStatistikPage = () => {
                 </div>
               )}
 
-              {/* Navigation Buttons */}
               <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
                 <button
-                  onClick={prevVisit}
+                  onClick={() => setCurrentIndex((prev) => Math.max(prev - 1, 0))}
                   disabled={currentIndex === 0}
                   className={`w-full sm:w-auto px-4 py-2 rounded-md font-medium transition ${
                     currentIndex === 0
@@ -233,7 +222,9 @@ const VisitStatistikPage = () => {
                 )}
 
                 <button
-                  onClick={nextVisit}
+                  onClick={() =>
+                    setCurrentIndex((prev) => Math.min(prev + 1, visits.length - 1))
+                  }
                   disabled={currentIndex === visits.length - 1}
                   className={`w-full sm:w-auto px-4 py-2 rounded-md font-medium transition ${
                     currentIndex === visits.length - 1
@@ -245,12 +236,12 @@ const VisitStatistikPage = () => {
                 </button>
               </div>
 
-              {/* Index Footer */}
               <p className="mt-6 text-center text-sm text-gray-500">
                 {currentIndex + 1} dari {visits.length} kunjungan hari ini
               </p>
             </>
           )}
+
           <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
         </div>
       </main>

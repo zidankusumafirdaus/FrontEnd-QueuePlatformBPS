@@ -11,6 +11,9 @@ import { LogoutPage } from "../../utils/LogoutPage";
 import { getWeeklyExports, downloadWeeklyExport, deleteWeeklyExport } from "../../service/api/api";
 import { ToastContainer, toast } from "react-toastify";
 
+const CACHE_KEY = "weekly_exports_cache";
+const CACHE_DURATION = 10 * 60 * 1000; // 10 menit
+
 const StyledWeeklyAutoExports = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -23,8 +26,23 @@ const StyledWeeklyAutoExports = () => {
   const fetchWeeklyExports = async () => {
     try {
       setLoading(true);
+
+      const cached = localStorage.getItem(CACHE_KEY);
+      const now = Date.now();
+
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (now - parsed.timestamp < CACHE_DURATION) {
+          setFiles(parsed.data);
+          setLoading(false);
+          return;
+        }
+      }
+
       const response = await getWeeklyExports();
-      setFiles(response.data || []);
+      const data = response.data || [];
+      setFiles(data);
+      localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: now }));
     } catch (error) {
       console.error("Gagal mengambil data exports:", error);
       toast.error("Gagal mengambil data exports.");
@@ -54,7 +72,9 @@ const StyledWeeklyAutoExports = () => {
     if (!window.confirm(`Yakin ingin menghapus file: ${filename}?`)) return;
     try {
       await deleteWeeklyExport(filename);
-      setFiles((prev) => prev.filter((file) => file.filename !== filename));
+      const updatedFiles = files.filter((file) => file.filename !== filename);
+      setFiles(updatedFiles);
+      localStorage.setItem(CACHE_KEY, JSON.stringify({ data: updatedFiles, timestamp: Date.now() }));
       toast.success("File berhasil dihapus.");
     } catch (error) {
       console.error("Gagal menghapus file:", error);

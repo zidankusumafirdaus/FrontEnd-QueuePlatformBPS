@@ -2,6 +2,7 @@ import './styles/index.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import ProtectedRoute from './utils/ProtectRoute';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 // Importing pages
@@ -23,33 +24,37 @@ import Error403 from './pages/error/403';
 import Error405 from './pages/error/405';
 import Error500 from './pages/error/500';
 
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ErrorHandlers>
-      <Router>
-        <Routes>
-          {/* Guest */}
-          <Route path="/" element={<Navigate to="/BPS-BukuTamu" replace />} />
-          <Route path="/BPS-BukuTamu" element={<HomePage />} />
-          <Route path="/Form-Biodata" element={<GuestPage />} />
-          <Route path="/Nomor-Antrian" element={<QueueNumber />} />
-          <Route path="/queue-kunjungan-dinas" element={<QueueKunjunganDinas />} />
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <Routes>
+            {/* Guest */}
+            <Route path="/" element={<Navigate to="/BPS-BukuTamu" replace />} />
+            <Route path="/BPS-BukuTamu" element={<HomePage />} />
+            <Route path="/Form-Biodata" element={<GuestPage />} />
+            <Route path="/Nomor-Antrian" element={<QueueNumber />} />
+            <Route path="/queue-kunjungan-dinas" element={<QueueKunjunganDinas />} />
 
-          {/* Customer Service */}
-          <Route path="/login-BukuTamu" element={<LoginPage />} />
-          <Route path="/visit-guest" element={<ProtectedRoute> <VisitPage /> </ProtectedRoute>} />
-          <Route path="/cslogs-BukuTamu" element={<ProtectedRoute> <CSLogs /> </ProtectedRoute>} />
-          <Route path="/all-guests" element={<ProtectedRoute> <AllGuestPage /> </ProtectedRoute>} />
-          <Route path="/weekly-exports" element={<ProtectedRoute> <WeeklyAutoExport /> </ProtectedRoute>} />
-          <Route path="/antrian-tamu" element={<ProtectedRoute> <VisitStatistikPage /> </ProtectedRoute>} />
+            {/* Customer Service */}
+            <Route path="/login-BukuTamu" element={<LoginPage />} />
+            <Route path="/visit-guest" element={<ProtectedRoute> <VisitPage /> </ProtectedRoute>} />
+            <Route path="/cslogs-BukuTamu" element={<ProtectedRoute> <CSLogs /> </ProtectedRoute>} />
+            <Route path="/all-guests" element={<ProtectedRoute> <AllGuestPage /> </ProtectedRoute>} />
+            <Route path="/weekly-exports" element={<ProtectedRoute> <WeeklyAutoExport /> </ProtectedRoute>} />
+            <Route path="/antrian-tamu" element={<ProtectedRoute> <VisitStatistikPage /> </ProtectedRoute>} />
 
-          {/* Error Handlers */}
-          <Route path="*" element={<NotFound />} />
-          <Route path="/403" element={<Error403 />} />
-          <Route path="/405" element={<Error405 />} />
-          <Route path="/500" element={<Error500 />} />
-        </Routes>
-      </Router>
+            {/* Error Handlers */}
+            <Route path="*" element={<NotFound />} />
+            <Route path="/403" element={<Error403 />} />
+            <Route path="/405" element={<Error405 />} />
+            <Route path="/500" element={<Error500 />} />
+          </Routes>
+        </Router>
+      </QueryClientProvider>
     </ErrorHandlers>
   </React.StrictMode>
 );

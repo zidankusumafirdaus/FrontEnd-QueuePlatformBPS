@@ -46,7 +46,7 @@ export const updateVisit = (id, data) => API.put(`/visit/visits/${id}`, data);
 export const loginCS = (data) => API.post("/cs/login", data);
 export const resetQueue = () => API.post("/cs/reset");
 export const confirmVisit = (visit_id) => API.put(`/cs/confirm/${visit_id}`);
-export const getCSLogs = () => API.get("/cs/actlogs");
+export const getCSLogs = () => API.get("/cs/actlogs").then(res => res.data);
 export const resetDatabase = () => API.post("/cs/resetdb");
 export const getNextReset = () => API.get("/cs/reset-countdown");
 

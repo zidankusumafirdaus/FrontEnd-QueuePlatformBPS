@@ -1,64 +1,49 @@
 import "react-toastify/dist/ReactToastify.css";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaTrashAlt } from "react-icons/fa";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-// Import from service, utils & components
+// Import dari service, utils & components
 import { getAllGuests } from "../../service/api/api";
 import { DeleteGuest } from "../../utils/DeleteGuest";
 import ConfirmModal from "../../components/guest/ConfirmModal";
 import ExportGuestButton from "../../components/export/ExportGuestButton";
 import SidebarAdmin from "../../components/elements/SidebarAdmin";
 
-
 const GuestListPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isActive = (path) => location.pathname === path;
-
-  const [guests, setGuests] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const queryClient = useQueryClient();
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedGuestId, setSelectedGuestId] = useState(null);
 
-  useEffect(() => {
-    const fetchGuests = async () => {
-      try {
-        const response = await getAllGuests();
-        setGuests(response.data);
-      } catch (err) {
-        console.error("Error fetching guests:", err);
-        
-        if (err.response) {
-        const status = err.response.status;
-        if (status === 403) {
-          navigate('/403');
-        } else if (status === 405) {
-          navigate('/405');
-        } else if (status === 500) {
-          navigate('/500');
-        } else {
-          setError("Gagal memuat data tamu. Silakan coba lagi.");
-        }
-      } else {
-        setError("Tidak dapat terhubung ke server.");
-      }
-    } finally {
-      setLoading(false);
+  const {
+    data: guestsData,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['all-guests'],
+    queryFn: getAllGuests,
+    staleTime: 1000 * 60 * 5,
+    onError: (err) => {
+      const status = err?.response?.status;
+      if (status === 403) navigate('/403');
+      else if (status === 405) navigate('/405');
+      else if (status === 500) navigate('/500');
     }
-  };
-
-  fetchGuests();
-  }, [navigate]);
+  });
 
   const handleConfirmDelete = async () => {
     setShowConfirm(false);
-    const result = await DeleteGuest(selectedGuestId, setGuests, guests);
+    const result = await DeleteGuest(selectedGuestId);
     if (result.success) {
       toast.success("Tamu berhasil dihapus.");
+      queryClient.invalidateQueries(['all-guests']);
     } else {
       toast.error("Gagal menghapus tamu. Terjadi kesalahan.");
     }
@@ -74,18 +59,19 @@ const GuestListPage = () => {
           <span className="text-lg font-semibold text-[#8DC63F]">Export Data Tamu</span>
           <ExportGuestButton />
         </section>
-        {loading ? (
+
+        {isLoading ? (
           <div className="flex justify-center py-10">
             <p className="text-[#00AEEF] text-lg font-semibold animate-pulse">Memuat data tamu...</p>
           </div>
-        ) : error ? (
+        ) : isError ? (
           <div className="flex justify-center py-10">
-            <p className="text-[#F7941D] text-lg font-semibold">{error}</p>
+            <p className="text-[#F7941D] text-lg font-semibold">Gagal memuat data tamu. Silakan coba lagi.</p>
           </div>
         ) : (
           <div className="bg-white p-6 rounded-2xl shadow-lg">
             <div className="overflow-x-auto">
-              {guests.length === 0 ? (
+              {guestsData?.data?.length === 0 ? (
                 <div className="text-center py-8 text-gray-400 text-base font-medium">
                   Tidak ada data tamu yang tersedia.
                 </div>
@@ -104,7 +90,7 @@ const GuestListPage = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-100">
-                    {guests.map((guest) => (
+                    {guestsData?.data.map((guest) => (
                       <tr key={guest.guest_id} className="hover:bg-[#00AEEF]/5 transition">
                         <td className="px-6 py-4 whitespace-nowrap text-xs text-[#222] font-normal">{guest.guest_name}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-xs text-[#222]">{guest.email}</td>
@@ -145,6 +131,6 @@ const GuestListPage = () => {
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
-}
+};
 
 export default GuestListPage;
