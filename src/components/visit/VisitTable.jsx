@@ -10,6 +10,32 @@ const fixedCategories = [
   "Lainnya",
 ];
 
+const columns = [
+  { label: "No", className: "uppercase tracking-wider" },
+  { label: "Nama Tamu" },
+  { label: "Tujuan" },
+  { label: "Catatan" },
+  { label: "Waktu" },
+  { label: "Nomor Antrian" },
+  { label: "Status" },
+  { label: "Aksi" },
+];
+
+const TableHeader = () => (
+  <thead className="bg-[#FFE8D6]">
+    <tr>
+      {columns.map((col, idx) => (
+        <th
+          key={col.label}
+          className={`px-6 py-3 text-left text-sm text-[#F7941D] uppercase tracking-wider font-bold ${col.className || ""}`}
+        >
+          {col.label}
+        </th>
+      ))}
+    </tr>
+  </thead>
+);
+
 const VisitTable = () => {
   const [categoryData, setCategoryData] = useState({});
   const [guestMap, setGuestMap] = useState({});
@@ -124,19 +150,23 @@ const VisitTable = () => {
 
   return (
     <div>
-      <div className="mb-6 flex flex-wrap gap-3">
+      <div className="mb-6 flex flex-wrap gap-x-8">
         {fixedCategories.map((category) => (
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
             className={`
-              px-5 py-2 rounded-lg text-lg font-medium transition-colors duration-200
-              ${
-                selectedCategory === category
-                  ? "bg-blue-600 text-white shadow-md"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }
+              relative px-0 py-2 text-base font-medium transition-colors duration-200
+              bg-transparent outline-none border-none shadow-none
+              after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:bottom-0 after:h-[3px]
+              after:bg-[#00AEEF] after:rounded-full after:transition-all after:duration-300
+              ${selectedCategory === category
+                ? "text-[#00AEEF] font-bold after:w-full"
+                : "text-gray-700 after:w-0 hover:after:w-full hover:text-[#00AEEF]"}
             `}
+            style={{
+              overflow: "hidden",
+            }}
           >
             {category}
           </button>
@@ -148,36 +178,9 @@ const VisitTable = () => {
           <p className="text-gray-600 text-lg">Memuat data kunjungan...</p>
         </div>
       ) : (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto flex flex-col gap-y-4">
           <table className="min-w-full divide-y divide-gray-200 shadow-sm rounded-lg overflow-hidden">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  No
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Nama Tamu
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Tujuan
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Catatan
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Waktu
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Nomor Antrian
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Aksi
-                </th>
-              </tr>
-            </thead>
+            <TableHeader />
             <tbody className="bg-white divide-y divide-gray-200">
               {visits.length === 0 ? (
                 <tr>

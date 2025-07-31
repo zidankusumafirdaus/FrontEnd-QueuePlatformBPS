@@ -4,11 +4,11 @@ import { LogoutPage } from "../../utils/LogoutPage";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const navItems = [
-  { label: "Data Kunjungan", icon: <FaClipboardList />, path: "/visit-guest", tooltip: "Data Kunjungan" },
-  { label: "Semua Tamu", icon: <FaUsers />, path: "/all-guests", tooltip: "Semua Tamu" },
+  { label: "Kunjungan", icon: <FaClipboardList />, path: "/visit-guest", tooltip: "Data Kunjungan" },
+  { label: "Tamu", icon: <FaUsers />, path: "/all-guests", tooltip: "Data Semua Tamu" },
   { label: "Export", icon: <FaDownload />, path: "/weekly-exports", tooltip: "Export" },
   { label: "Log CS", icon: <FaChartBar />, path: "/cslogs-BukuTamu", tooltip: "Log CS" },
-  { label: "Antrian Tamu", icon: <FaEye />, path: "/antrian-tamu", tooltip: "Visit Statistik" }, // ✅ Ini yang ditambahkan
+  { label: "Antrian", icon: <FaEye />, path: "/antrian-tamu", tooltip: "Antrian Tamu" }, 
 ];
 
 const bottomNav = [
@@ -76,7 +76,7 @@ const SidebarAdmin = () => {
       </div>
 
       {/* Main nav */}
-      <nav className={`flex-1 flex flex-col gap-1 px-2 py-4 ${collapsed ? "items-start" : ""} ${menuActive ? "block" : ""}`}>
+      <nav className={`flex-1 flex flex-col gap-3 px-2 py-4 ${collapsed ? "items-start" : ""} ${menuActive ? "block" : ""}`}>
         {navItems.map((item) => (
           <SidebarNavItem
             key={item.path}
