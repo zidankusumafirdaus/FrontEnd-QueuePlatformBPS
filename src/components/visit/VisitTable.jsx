@@ -189,7 +189,7 @@ const VisitTable = () => {
                         {v.mark === "hadir" ? null : (
                           <button
                             onClick={() => handleToggleMark(v)}
-                            className="px-4 py-2 rounded-md text-white bg-green-500 hover:bg-green-600 whitespace-nowrap"
+                            className="px-4 py-2 rounded-md text-white bg-[#8DC63F] hover:bg-green-600 whitespace-nowrap"
                           >
                             Tandai Hadir
                           </button>

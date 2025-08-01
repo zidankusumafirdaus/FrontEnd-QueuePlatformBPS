@@ -60,7 +60,7 @@ const GuestVisitPage = () => {
       <main className="flex-1 overflow-auto p-8">
         <section className="bg-white p-6 rounded-lg shadow-md mb-8">
           <div className="flex justify-between w-full">
-            <h1 className="text-4xl font-bold mb-6 text-gray-800">Data Kunjungan</h1>
+            <h1 className="text-4xl font-bold mb-6 text-[#00AEEF]">Data Kunjungan</h1>
             {loadingReset ? (
               <p className="text-gray-500 self-center">Memuat waktu reset...</p>
             ) : (

@@ -1,5 +1,5 @@
 import "react-toastify/dist/ReactToastify.css";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaTrashAlt } from "react-icons/fa";
@@ -11,6 +11,7 @@ import { DeleteGuest } from "../../utils/DeleteGuest";
 import ConfirmModal from "../../components/guest/ConfirmModal";
 import ExportGuestButton from "../../components/export/ExportGuestButton";
 import SidebarAdmin from "../../components/elements/SidebarAdmin";
+import FilterElements from "../../components/guest/FilterElements";
 
 const GuestListPage = () => {
   const navigate = useNavigate();
@@ -20,6 +21,11 @@ const GuestListPage = () => {
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedGuestId, setSelectedGuestId] = useState(null);
+  
+  // Filter dan Search states
+  const [searchName, setSearchName] = useState("");
+  const [genderFilter, setGenderFilter] = useState("");
+  const [identityTypeFilter, setIdentityTypeFilter] = useState("");
 
   const {
     data: guestsData,
@@ -38,6 +44,30 @@ const GuestListPage = () => {
     }
   });
 
+  // Filter dan search logic
+  const filteredGuests = useMemo(() => {
+    if (!guestsData?.data) return [];
+
+    return guestsData.data.filter((guest) => {
+      const matchesName = guest.guest_name.toLowerCase().includes(searchName.toLowerCase());
+      const matchesGender = !genderFilter || guest.gender === genderFilter;
+      const matchesIdentityType = !identityTypeFilter || guest.identity_type === identityTypeFilter;
+      
+      return matchesName && matchesGender && matchesIdentityType;
+    });
+  }, [guestsData?.data, searchName, genderFilter, identityTypeFilter]);
+
+  // Get unique values for dropdown options
+  const genderOptions = useMemo(() => {
+    if (!guestsData?.data) return [];
+    return [...new Set(guestsData.data.map(guest => guest.gender))].filter(Boolean);
+  }, [guestsData?.data]);
+
+  const identityTypeOptions = useMemo(() => {
+    if (!guestsData?.data) return [];
+    return [...new Set(guestsData.data.map(guest => guest.identity_type))].filter(Boolean);
+  }, [guestsData?.data]);
+
   const handleConfirmDelete = async () => {
     setShowConfirm(false);
     const result = await DeleteGuest(selectedGuestId);
@@ -50,16 +80,42 @@ const GuestListPage = () => {
     setSelectedGuestId(null);
   };
 
+  const clearFilters = () => {
+    setSearchName("");
+    setGenderFilter("");
+    setIdentityTypeFilter("");
+  };
+
   return (
     <div className="flex h-screen bg-[#F5F8FA] font-poppins">
       <SidebarAdmin />
       <main className="flex-1 overflow-auto p-8 font-poppins">
-        <h1 className="text-4xl font-bold mb-8 text-[#00AEEF] drop-shadow-sm">Data Semua Tamu</h1>
-        <section className="bg-white p-6 rounded-2xl shadow-lg mb-10 flex items-center justify-between">
-          <span className="text-lg font-semibold text-[#8DC63F]">Export Data Tamu</span>
-          <ExportGuestButton />
-        </section>
+        {/* Header dengan Export Button */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-4xl font-bold text-[#00AEEF] drop-shadow-sm">Data Semua Tamu</h1>
+          </div>
+          <div className="flex-shrink-0">
+            <ExportGuestButton />
+          </div>
+        </div>
 
+        {/* Filter Component */}
+        <FilterElements
+          searchName={searchName}
+          setSearchName={setSearchName}
+          genderFilter={genderFilter}
+          setGenderFilter={setGenderFilter}
+          identityTypeFilter={identityTypeFilter}
+          setIdentityTypeFilter={setIdentityTypeFilter}
+          genderOptions={genderOptions}
+          identityTypeOptions={identityTypeOptions}
+          onClearFilters={clearFilters}
+          resultCount={filteredGuests.length}
+          totalCount={guestsData?.data?.length || 0}
+        />
+
+        {/* Table Section */}
         {isLoading ? (
           <div className="flex justify-center py-10">
             <p className="text-[#00AEEF] text-lg font-semibold animate-pulse">Memuat data tamu...</p>
@@ -71,9 +127,12 @@ const GuestListPage = () => {
         ) : (
           <div className="bg-white p-6 rounded-2xl shadow-lg">
             <div className="overflow-x-auto">
-              {guestsData?.data?.length === 0 ? (
+              {filteredGuests.length === 0 ? (
                 <div className="text-center py-8 text-gray-400 text-base font-medium">
-                  Tidak ada data tamu yang tersedia.
+                  {guestsData?.data?.length === 0 
+                    ? "Tidak ada data tamu yang tersedia."
+                    : "Tidak ada tamu yang sesuai dengan filter pencarian."
+                  }
                 </div>
               ) : (
                 <table className="min-w-full divide-y divide-gray-200">
@@ -90,7 +149,7 @@ const GuestListPage = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-100">
-                    {guestsData?.data.map((guest) => (
+                    {filteredGuests.map((guest) => (
                       <tr key={guest.guest_id} className="hover:bg-[#00AEEF]/5 transition">
                         <td className="px-6 py-4 whitespace-nowrap text-xs text-[#222] font-normal">{guest.guest_name}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-xs text-[#222]">{guest.email}</td>

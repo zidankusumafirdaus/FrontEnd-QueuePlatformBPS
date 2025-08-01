@@ -29,7 +29,7 @@ const ResetQueueButton = ({ onClick, className = "", confirm }) => {
   return (
     <button
       onClick={handleClick}
-      className={`px-5 py-1 bg-[#00AEEF] text-white rounded-md hover:bg-[#008bef] transition font-poppins text-sm font-medium flex items-center justify-center gap-2 shadow ${className}`}
+      className={`px-5 py-1 bg-[#F7941D] text-white rounded-md hover:bg-[#FC6F2F] transition font-poppins text-sm font-medium flex items-center justify-center gap-2 shadow ${className}`}
     >
       <FaRedo className="text-lg" />
       Reset Antrian

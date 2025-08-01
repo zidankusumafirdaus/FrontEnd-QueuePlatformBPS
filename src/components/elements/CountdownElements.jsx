@@ -2,7 +2,7 @@ import React from "react";
 
 const ResetCountdown = ({ nextReset, countdown }) => (
   <div className="mb-4">
-    <div className="inline-block text-blue-800 px-4 py-2 rounded shadow">
+    <div className="inline-block text-blue-800 px-4 py-2 rounded">
       <span className="font-semibold font-poppins">Reset Database:</span>{" "}
       {nextReset ? (
         <>
