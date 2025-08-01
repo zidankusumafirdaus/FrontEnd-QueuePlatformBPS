@@ -30,11 +30,7 @@ const ExportLogButton = () => {
     <button
       onClick={downloadLogFile}
       className="
-        bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg
-        shadow-md hover:shadow-lg
-        transition-all duration-300 ease-in-out
-        focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75
-        text-lg flex items-center gap-2
+        px-5 py-2 bg-[#8DC63F] text-white rounded-md hover:bg-[#52ae36] transition font-poppins font-medium text-sm flex items-center justify-center gap-2 shadow
       "
     >
       <Download className="w-5 h-5" />
