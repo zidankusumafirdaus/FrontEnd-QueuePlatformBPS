@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useRef, useState } from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import logo_bps from "../../assets/logo_bps.png";
 
 const CetakPage = ({ queueData }) => {
   const {
-    guest_name = "Nama Tamu",
-    target_service = "Layanan",
-    queue_number = "001",
-    purpose = ""
+    guest_name,
+    target_service,
+    queue_number,
+    purpose,
   } = queueData || {};
 
-  // Generate date seperti di QueueNumber.jsx
   const now = new Date();
   const date = now.toLocaleDateString("id-ID", {
     weekday: "long",
@@ -18,97 +19,119 @@ const CetakPage = ({ queueData }) => {
     year: "numeric",
   });
 
+  const [size, setSize] = useState("a4"); // "a4" or "struk"
+  const printRef = useRef();
+
+  const handleDownload = async () => {
+    const content = printRef.current;
+    const scale = size === "struk" ? 2 : 1.5;
+
+    const canvas = await html2canvas(content, {
+      scale: scale,
+      useCORS: true,
+    });
+
+    const imgData = canvas.toDataURL("image/png");
+    const pdf =
+      size === "struk"
+        ? new jsPDF({
+            orientation: "portrait",
+            unit: "mm",
+            format: [80, canvas.height * 0.264583],
+          })
+        : new jsPDF({
+            orientation: "portrait",
+            unit: "mm",
+            format: "a4",
+          });
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const imgProps = {
+      width: pdfWidth,
+      height: (canvas.height * pdfWidth) / canvas.width,
+    };
+
+    pdf.addImage(imgData, "PNG", 0, 0, imgProps.width, imgProps.height);
+    pdf.save(`antrian-${queue_number}.pdf`);
+  };
+
   return (
-    <div className="w-full h-screen bg-white p-8 font-poppins" id="print-content">
-      {/* Header */}
-      <div className="text-center mb-8 border-b-2 border-[#00B4D8] pb-6">
-        <div className="flex justify-center items-center gap-4 mb-4">
-          <img src={logo_bps} alt="Logo BPS" className="w-20 h-auto" />
-          <div className="text-left">
-            <h1 className="text-2xl font-bold text-[#00B4D8]">
-              BADAN PUSAT STATISTIK
-            </h1>
-            <p className="text-gray-600 text-sm">REPUBLIK INDONESIA</p>
-          </div>
-        </div>
-        <h2 className="text-xl font-bold text-gray-800">TIKET ANTRIAN TAMU</h2>
+    <div className="p-4 max-w-md mx-auto text-center">
+      {/* Dropdown + Button */}
+      <div className="flex flex-col sm:flex-row justify-center items-center gap-3 mb-6">
+        <select
+          value={size}
+          onChange={(e) => setSize(e.target.value)}
+          className="p-2 border rounded"
+        >
+          <option value="a4">Ukuran A4</option>
+          <option value="struk">Ukuran Struk (80mm)</option>
+        </select>
+        <button
+          onClick={handleDownload}
+          className="bg-[#00B4D8] text-white px-4 py-2 rounded shadow hover:bg-[#0096c7]"
+        >
+          Download PDF
+        </button>
       </div>
 
-      {/* Queue Number - Main Focus */}
-      <div className="text-center mb-8">
-        <h1 className="text-[#00B4D8] text-3xl font-bold mb-4">
-          NOMOR ANTRIAN
-        </h1>
-        <div className="inline-block bg-[#00B4D8] rounded-2xl p-8 shadow-lg">
-          <span className="text-white text-8xl font-bold">
+      {/* Tiket Antrian */}
+      <div
+        ref={printRef}
+        id="print-content"
+        className={`${
+          size === "struk" ? "w-[300px]" : "w-full"
+        } bg-white p-4 text-sm mx-auto rounded-md shadow-md text-gray-800`}
+      >
+        {/* Logo & Title */}
+        <div className="text-center mb-3">
+          <img src={logo_bps} alt="Logo BPS" className="w-32 mx-auto mb-1" />
+        </div>
+
+        {/* Nomor Antrian */}
+        <div className="text-center mb-3">
+          <p className="text-xs font-medium">NOMOR ANTRIAN</p>
+          <p className="text-[#0077B6] text-[40px] font-bold leading-none mb-12">
             {queue_number}
-          </span>
+          </p>
         </div>
-      </div>
 
-      {/* Guest Information */}
-      <div className="bg-gray-50 rounded-lg p-6 mb-6">
-        <h3 className="text-lg font-bold text-gray-800 mb-4 border-b border-gray-300 pb-2">
-          INFORMASI TAMU
-        </h3>
-        <div className="grid grid-cols-2 gap-6">
-          <div>
-            <div className="bg-[#00B4D8] inline-block px-4 py-2 rounded-lg mb-2">
-              <p className="text-white text-sm font-medium">Nama Tamu</p>
+        {/* Info Pengunjung */}
+        <div className="text-xs mb-8 border-t border-b border-gray-300 pt-2 pb-4 text-left">
+          <div className="flex justify-between mb-1">
+            <span>Nama</span>
+            <span className="font-semibold text-right">{guest_name}</span>
+          </div>
+          <div className="flex justify-between mb-1">
+            <span>Tanggal</span>
+            <span className="font-semibold text-right">{date}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Tujuan Kunjungan</span>
+            <span className="font-semibold text-right">{target_service}</span>
+          </div>
+        </div>
+
+        {/* Catatan Pengunjung */}
+        {purpose && (
+          <div className="bg-[#FFF3CD] border border-[#FFECB5] rounded-lg p-2 mb-3 text-left">
+            <p className="text-[10px] font-semibold text-[#856404] mb-1">
+              Catatan Pengunjung :
+            </p>
+            <div className="bg-white border border-dashed border-[#FFD700] rounded p-1">
+              <p className="text-[#856404] text-[10px]">{purpose}</p>
             </div>
-            <p className="text-gray-800 font-bold text-lg">{guest_name}</p>
           </div>
-          
-          <div>
-            <div className="bg-[#99D98C] inline-block px-4 py-2 rounded-lg mb-2">
-              <p className="text-white text-sm font-medium">Tanggal Kunjungan</p>
-            </div>
-            <p className="text-gray-800 font-bold text-lg">{date}</p>
-          </div>
-        </div>
-        
-        <div className="mt-4">
-          <div className="bg-[#F77F00] inline-block px-4 py-2 rounded-lg mb-2">
-            <p className="text-white text-sm font-medium">Tujuan Kunjungan</p>
-          </div>
-          <p className="text-gray-800 font-bold text-lg">{target_service}</p>
-        </div>
-      </div>
+        )}
 
-      {/* Purpose/Notes */}
-      {purpose && (
-        <div className="bg-[#FFF3CD] rounded-lg p-4 mb-6 border border-[#FFEAA7]">
-          <h3 className="text-[#856404] font-bold mb-2">
-            CATATAN PENGUNJUNG:
-          </h3>
-          <div className="bg-white rounded-lg p-3 border">
-            <p className="text-[#856404] text-sm">{purpose}</p>
-          </div>
+        {/* Footer */}
+        <div className="text-center text-[10px] border-t border-gray-300 pt-2">
+          <p className="mb-1">Harap menunggu Panggilan nomor antrian</p>
+          <p className="text-[#0077B6] font-bold">Terima Kasih Atas Kunjungan Anda</p>
+          <p className="text-gray-400 mt-1 text-[8px]">
+            Dicetak: {new Date().toLocaleString("id-ID")}
+          </p>
         </div>
-      )}
-
-      {/* Instructions */}
-      <div className="bg-blue-50 rounded-lg p-4 mb-6 border border-blue-200">
-        <h3 className="text-[#00B4D8] font-bold mb-2">PETUNJUK:</h3>
-        <ul className="text-gray-700 text-sm space-y-1">
-          <li>• Harap simpan tiket ini dengan baik</li>
-          <li>• Tunggu panggilan nomor antrian Anda</li>
-          <li>• Tunjukkan tiket ini kepada petugas saat dipanggil</li>
-          <li>• Jika ada pertanyaan, hubungi petugas di meja informasi</li>
-        </ul>
-      </div>
-
-      {/* Footer */}
-      <div className="text-center border-t-2 border-gray-300 pt-4">
-        <p className="text-gray-700 font-medium mb-1">
-          Harap menunggu panggilan nomor antrian
-        </p>
-        <p className="text-[#00B4D8] font-bold text-lg">
-          TERIMA KASIH ATAS KUNJUNGAN ANDA
-        </p>
-        <p className="text-xs text-gray-500 mt-2">
-          Dicetak pada: {new Date().toLocaleString("id-ID")}
-        </p>
       </div>
     </div>
   );
