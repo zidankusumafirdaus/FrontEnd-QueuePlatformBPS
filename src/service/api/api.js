@@ -17,13 +17,16 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-// Interceptor untuk menangani error
 API.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      console.error("Token tidak valid atau kedaluwarsa.");
+    const status = error.response?.status;
+    const requestUrl = error.config?.url;
+
+    if (status === 401 && !requestUrl.includes("/cs/login")) {
+      window.location.href = "/login-BukuTamu";
     }
+
     return Promise.reject(error);
   }
 );
@@ -49,6 +52,8 @@ export const confirmVisit = (visit_id) => API.put(`/cs/confirm/${visit_id}`);
 export const getCSLogs = () => API.get("/cs/actlogs").then(res => res.data);
 export const resetDatabase = () => API.post("/cs/resetdb");
 export const getNextReset = () => API.get("/cs/reset-countdown");
+export const setDefaultLogExpiry = (days) => API.post("/cs/expiredLogs", { days }).then((res) => res.data)
+export const getDefaultLogExpiry = () => API.get("/cs/get-expired-logs").then((res) => res.data.days)
 
 // API untuk Export
 export const exportGuests = () => API.get("/export/guest", { responseType: "blob" });
