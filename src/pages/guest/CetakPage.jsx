@@ -4,12 +4,7 @@ import jsPDF from "jspdf";
 import logo_bps from "../../assets/logo_bps.png";
 
 const CetakPage = ({ queueData }) => {
-  const {
-    guest_name,
-    target_service,
-    queue_number,
-    purpose,
-  } = queueData || {};
+  const { guest_name, target_service, queue_number, purpose } = queueData || {};
 
   const now = new Date();
   const date = now.toLocaleDateString("id-ID", {
@@ -97,7 +92,7 @@ const CetakPage = ({ queueData }) => {
         </div>
 
         {/* Info Pengunjung */}
-        <div className="text-xs mb-8 border-t border-b border-gray-300 pt-2 pb-4 text-left">
+        <div className="text-xs mb-4 border-t border-b border-gray-300 pt-2 pb-4 text-left">
           <div className="flex justify-between mb-1">
             <span>Nama</span>
             <span className="font-semibold text-right">{guest_name}</span>
@@ -114,21 +109,23 @@ const CetakPage = ({ queueData }) => {
 
         {/* Catatan Pengunjung */}
         {purpose && (
-          <div className="bg-[#FFF3CD] border border-[#FFECB5] rounded-lg p-2 mb-3 text-left">
-            <p className="text-[10px] font-semibold text-[#856404] mb-1">
+          <div className="bg-[#FFF3CD] border border-[#FFECB5] rounded-lg p-2 pb-1 mb-2 text-left">
+            <p className="text-[10px] font-semibold text-[#856404] m-0 leading-none">
               Catatan Pengunjung :
             </p>
-            <div className="bg-white border border-dashed border-[#FFD700] rounded p-1">
-              <p className="text-[#856404] text-[10px]">{purpose}</p>
+            <div className="bg-white border border-dashed border-[#FFD700] mt-2 px-1 flex pb-1 pt-0">
+              <p className="text-[#856404] text-[10px] m-0">{purpose}</p>
             </div>
           </div>
         )}
 
         {/* Footer */}
-        <div className="text-center text-[10px] border-t border-gray-300 pt-2">
+        <div className="text-center text-[10px] border-t border-gray-300 pt-1 mb-0 pb-0">
           <p className="mb-1">Harap menunggu Panggilan nomor antrian</p>
-          <p className="text-[#0077B6] font-bold">Terima Kasih Atas Kunjungan Anda</p>
-          <p className="text-gray-400 mt-1 text-[8px]">
+          <p className="text-[#0077B6] font-bold">
+            Terima Kasih Atas Kunjungan Anda
+          </p>
+          <p className="text-gray-400 mt-1 text-[8px] mb-0">
             Dicetak: {new Date().toLocaleString("id-ID")}
           </p>
         </div>
