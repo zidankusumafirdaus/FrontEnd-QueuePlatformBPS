@@ -8,14 +8,14 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 // Importing pages
 import GuestPage from "./pages/guest/GuestPage";
 import QueueNumber from "./pages/guest/QueueNumber";
-import VisitPage from "./pages/cs/GuestVisitPage";
+import Kunjungan from "./pages/cs/Kunjungan";
 import LoginPage from "./pages/cs/LoginPage";
 import CSLogs from "./pages/cs/CSLogs";
-import AllGuestPage from "./pages/cs/AllGuestPage";
+import Tamu from "./pages/cs/Tamu";
 import HomePage from "./pages/home/HomePage";
 import QueueKunjunganDinas from './pages/guest/QueueKunjunganDinas';
-import WeeklyAutoExport from './pages/cs/WeeklyAutoExport';
-import VisitStatistikPage from './pages/cs/VisitStatistikPage';
+import Export from './pages/cs/Export';
+import Antrian from './pages/cs/Antrian';
 
 // Error pages
 import ErrorHandlers from './utils/ErrorHandlers';
@@ -41,11 +41,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
             {/* Customer Service */}
             <Route path="/login-BukuTamu" element={<LoginPage />} />
-            <Route path="/visit-guest" element={<ProtectedRoute> <VisitPage /> </ProtectedRoute>} />
+            <Route path="/visit-guest" element={<ProtectedRoute> <Kunjungan /> </ProtectedRoute>} />
             <Route path="/cslogs-BukuTamu" element={<ProtectedRoute> <CSLogs /> </ProtectedRoute>} />
-            <Route path="/all-guests" element={<ProtectedRoute> <AllGuestPage /> </ProtectedRoute>} />
-            <Route path="/weekly-exports" element={<ProtectedRoute> <WeeklyAutoExport /> </ProtectedRoute>} />
-            <Route path="/antrian-tamu" element={<ProtectedRoute> <VisitStatistikPage /> </ProtectedRoute>} />
+            <Route path="/all-guests" element={<ProtectedRoute> <Tamu /> </ProtectedRoute>} />
+            <Route path="/weekly-exports" element={<ProtectedRoute> <Export /> </ProtectedRoute>} />
+            <Route path="/antrian-tamu" element={<ProtectedRoute> <Antrian /> </ProtectedRoute>} />
 
             {/* Error Handlers */}
             <Route path="*" element={<NotFound />} />

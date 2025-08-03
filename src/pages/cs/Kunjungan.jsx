@@ -12,7 +12,7 @@ import ResetCountdown from "../../components/elements/CountdownElements";
 
 import "react-toastify/dist/ReactToastify.css";
 
-const GuestVisitPage = () => {
+const Kunjungan = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isActive = (path) => location.pathname === path;
@@ -137,4 +137,4 @@ const GuestVisitPage = () => {
   );
 };
 
-export default GuestVisitPage;
+export default Kunjungan;

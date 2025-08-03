@@ -13,7 +13,7 @@ import ExportGuestButton from "../../components/export/ExportGuestButton";
 import SidebarAdmin from "../../components/elements/SidebarAdmin";
 import FilterElements from "../../components/guest/FilterElements";
 
-const GuestListPage = () => {
+const Tamu = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isActive = (path) => location.pathname === path;
@@ -192,4 +192,4 @@ const GuestListPage = () => {
   );
 };
 
-export default GuestListPage;
+export default Tamu;

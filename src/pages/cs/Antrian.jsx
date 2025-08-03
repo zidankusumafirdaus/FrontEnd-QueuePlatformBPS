@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SidebarAdmin from "../../components/elements/SidebarAdmin";
 
-const VisitStatistikPage = () => {
+const Antrian = () => {
   const queryClient = useQueryClient();
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -249,4 +249,4 @@ const VisitStatistikPage = () => {
   );
 };
 
-export default VisitStatistikPage;
+export default Antrian;

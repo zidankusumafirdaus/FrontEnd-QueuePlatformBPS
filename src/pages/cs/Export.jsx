@@ -18,7 +18,7 @@ import {
 const CACHE_KEY = "weekly_exports_cache"
 const CACHE_DURATION = 1000 * 60 * 5
 
-const StyledWeeklyAutoExports = () => {
+const Export = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const isActive = (path) => location.pathname === path
@@ -284,4 +284,4 @@ const StyledWeeklyAutoExports = () => {
   )
 }
 
-export default StyledWeeklyAutoExports
+export default Export
