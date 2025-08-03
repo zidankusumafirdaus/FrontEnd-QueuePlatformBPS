@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import logo_bps from "../../assets/logo_bps.png";
+import CetakButtonAntrian from "../../components/elements/CetakButtonAntrian";
 
 const QueueNumber = () => {
   const { state } = useLocation();
@@ -13,6 +14,15 @@ const QueueNumber = () => {
     month: "long",
     year: "numeric",
   });
+
+  // Tambahkan definisi queueData
+  const queueData = {
+    guest_name,
+    target_service,
+    queue_number,
+    purpose,
+    date,
+  };
 
   return (
     <div className="min-h-screen bg-white flex flex-col justify-center">
@@ -38,8 +48,6 @@ const QueueNumber = () => {
         <div className="flex-1 p-4 lg:p-8 flex flex-col justify-center">
           {/* Info Cards */}
           <div className="flex flex-col gap-3 mb-8">
-            {/* Header */}
-
             {/* Cards Container - Mobile */}
             <div className="bg-Abu rounded-xl p-4 shadow-super lg:hidden">
               <div className="flex flex-col space-y-4">
@@ -118,6 +126,14 @@ const QueueNumber = () => {
               </div>
             </div>
           )}
+
+          {/* Print Button */}
+          <div className="text-center mb-6">
+            <CetakButtonAntrian
+              queueData={queueData}
+              className="w-full lg:w-auto"
+            />
+          </div>
 
           {/* Bottom Notice */}
           <div className="text-center">
