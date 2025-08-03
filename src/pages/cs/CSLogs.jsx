@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom"
 import { getCSLogs } from "../../service/api/api"
 import ExportLogButton from "../../components/export/ExportLogButton"
 import SidebarAdmin from "../../components/elements/SidebarAdmin"
+import ExpiredLogConfig from "../../components/elements/ExpiredLogConfig"
 
 const CSLogs = () => {
   const navigate = useNavigate()
@@ -55,12 +56,16 @@ const CSLogs = () => {
       <SidebarAdmin />
 
       <main className="flex-1 overflow-auto p-8 font-poppins">
-        <h1 className="text-4xl font-bold mb-8 text-[#00AEEF] drop-shadow-sm">Log Aktivitas Customer Service</h1>
+        <h1 className="text-4xl font-bold mb-8 text-[#00AEEF] drop-shadow-sm">
+          Log Aktivitas Customer Service
+        </h1>
 
         <section className="bg-white p-6 rounded-2xl shadow-lg mb-8 flex items-center justify-between">
           <span className="text-lg font-semibold text-[#8DC63F]">Export Data Log</span>
           <ExportLogButton />
         </section>
+
+        <ExpiredLogConfig refetchKey="cslogs" />
 
         <section className="bg-white p-6 rounded-2xl shadow-lg">
           {isLoading ? (
