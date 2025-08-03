@@ -1,76 +1,86 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaPrint } from "react-icons/fa";
-import html2pdf from "html2pdf.js";
-import CetakPage from "../../pages/guest/CetakPage"; // Perbaiki path import
+import CetakPage from "../../pages/guest/CetakPage";
 import { createRoot } from "react-dom/client";
+import html2pdf from "html2pdf.js";
 
 const CetakButtonAntrian = ({ queueData, className = "" }) => {
+  const [format, setFormat] = useState("a4");
+
   const handlePrint = async () => {
     try {
-      // Buat container sementara untuk render komponen
-      const printContainer = document.createElement('div');
-      printContainer.style.position = 'absolute';
-      printContainer.style.left = '-9999px';
-      printContainer.style.top = '-9999px';
-      printContainer.style.width = '210mm'; // A4 width
-      printContainer.style.minHeight = '297mm'; // A4 height
-      document.body.appendChild(printContainer);
+      const printContainer = document.createElement("div");
+      printContainer.style.position = "absolute";
+      printContainer.style.left = "-9999px";
+      printContainer.style.top = "-9999px";
 
-      // Render komponen CetakPage ke container
+      // Set ukuran sesuai pilihan
+      if (format === "a4") {
+        printContainer.style.width = "210mm";
+        printContainer.style.minHeight = "297mm";
+      } else if (format === "struk") {
+        printContainer.style.width = "80mm";
+        printContainer.style.minHeight = "150mm";
+      }
+
+      document.body.appendChild(printContainer);
       const root = createRoot(printContainer);
-      
-      // Promise untuk menunggu render selesai
+
       await new Promise((resolve) => {
         root.render(<CetakPage queueData={queueData} />);
-        setTimeout(resolve, 500); // Beri waktu lebih untuk render
+        setTimeout(resolve, 500);
       });
 
-      // Konfigurasi html2pdf
       const opt = {
-        margin: [5, 5, 5, 5],
+        margin: 5,
         filename: `tiket-antrian-${queueData?.queue_number || 'xxx'}-${Date.now()}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: {
           scale: 2,
           useCORS: true,
           allowTaint: true,
-          backgroundColor: '#ffffff',
-          width: 794, // A4 width in pixels at 96 DPI
-          height: 1123 // A4 height in pixels at 96 DPI
+          backgroundColor: "#ffffff",
         },
-        jsPDF: { 
-          unit: 'mm', 
-          format: 'a4', 
-          orientation: 'portrait' 
-        }
+        jsPDF: {
+          unit: "mm",
+          format: format === "a4" ? "a4" : [80, 150],
+          orientation: "portrait",
+        },
       };
 
-      // Generate PDF
-      const element = printContainer.querySelector('#print-content');
+      const element = printContainer.querySelector("#print-content");
       if (element) {
         await html2pdf().set(opt).from(element).save();
       } else {
-        throw new Error('Print content not found');
+        throw new Error("Print content not found");
       }
 
-      // Cleanup
       root.unmount();
       document.body.removeChild(printContainer);
-      
     } catch (error) {
-      console.error('Error generating PDF:', error);
-      alert('Gagal mencetak tiket. Silakan coba lagi.');
+      console.error("Error generating PDF:", error);
+      alert("Gagal mencetak tiket. Silakan coba lagi.");
     }
   };
 
   return (
-    <button
-      onClick={handlePrint}
-      className={`inline-flex items-center px-6 py-3 bg-[#00B4D8] hover:bg-[#0096c7] text-white rounded-lg transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 ${className}`}
-    >
-      <FaPrint className="mr-2" />
-      Cetak Tiket
-    </button>
+    <div className="flex flex-col items-start gap-2">
+      <select
+        value={format}
+        onChange={(e) => setFormat(e.target.value)}
+        className="mb-2 px-3 py-1 rounded border border-gray-300"
+      >
+        <option value="a4">Ukuran A4</option>
+        <option value="struk">Struk Kecil (80x150 mm)</option>
+      </select>
+      <button
+        onClick={handlePrint}
+        className={`inline-flex justify-center items-center px-6 py-3 bg-[#00B4D8] hover:bg-[#0096c7] text-white rounded-lg transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 ${className}`}
+      >
+        <FaPrint className="mr-2" />
+        Cetak Tiket
+      </button>
+    </div>
   );
 };
 
