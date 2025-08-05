@@ -48,23 +48,6 @@ const PurposeStep = ({ form, handleChange, handleSubmit, isLoading }) => {
   return (
     <>
       <div>
-        <label className="block text-sm text-gray-700 mb-1">Catatan</label>
-        <input
-          type="text"
-          name="purpose"
-          value={form.purpose || ""}
-          onChange={handleChange}
-          className={`w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-400 outline-none ${
-            errors.purpose ? "border-red-500" : ""
-          }`}
-          required
-        />
-        {errors.purpose && (
-          <p className="mt-1 text-sm text-red-600">{errors.purpose}</p>
-        )}
-      </div>
-
-      <div>
         <label className="block text-sm font-small text-gray-700 mb-2">
           Tujuan Kunjungan*
         </label>
@@ -110,6 +93,23 @@ const PurposeStep = ({ form, handleChange, handleSubmit, isLoading }) => {
               </p>
             )}
           </div>
+        )}
+      </div>
+
+      <div>
+        <label className="block text-sm text-gray-700 mb-1">Catatan</label>
+        <input
+          type="text"
+          name="purpose"
+          value={form.purpose || ""}
+          onChange={handleChange}
+          className={`w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-400 outline-none ${
+            errors.purpose ? "border-red-500" : ""
+          }`}
+          required
+        />
+        {errors.purpose && (
+          <p className="mt-1 text-sm text-red-600">{errors.purpose}</p>
         )}
       </div>
 
