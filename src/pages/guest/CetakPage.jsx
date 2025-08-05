@@ -84,12 +84,14 @@ const CetakPage = ({ queueData }) => {
         </div>
 
         {/* Nomor Antrian */}
-        <div className="text-center mb-3">
-          <p className="text-xs font-medium">NOMOR ANTRIAN</p>
-          <p className="text-[#0077B6] text-[40px] font-bold leading-none mb-12">
-            {queue_number}
-          </p>
-        </div>
+        {queue_number && (
+          <div className="text-center mb-3">
+            <p className="text-xs font-medium">NOMOR ANTRIAN</p>
+            <p className="text-[#0077B6] text-[40px] font-bold leading-none mb-12">
+              {queue_number}
+            </p>
+          </div>
+        )}
 
         {/* Info Pengunjung */}
         <div className="text-xs mb-4 border-t border-b border-gray-300 pt-2 pb-4 text-left">
