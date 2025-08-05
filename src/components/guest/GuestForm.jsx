@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo_bps from "../../assets/logo_bps.png";
 import { createGuest, getGuestById, getVisits } from "../../service/api/api.js";
-import StepperNav from "./StepperNav";
-import LoadingOverlay from "./LoadingOverlay";
-import PersonalInfoStep from "./PersonalInfoStep";
-import PurposeStep from "./PurposeStep";
+import StepperNav from "../elements/StepperNav.jsx";
+import LoadingOverlay from "../core/LoadingOverlay.jsx";
+import PersonalInfoStep from "../elements/PersonalInfoStep.jsx";
+import PurposeStep from "../elements/PurposeStep.jsx";
 
 const GuestForm = () => {
   const navigate = useNavigate();
