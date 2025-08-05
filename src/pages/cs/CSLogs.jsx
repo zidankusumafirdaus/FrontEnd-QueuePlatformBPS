@@ -2,8 +2,8 @@ import { useQuery } from "@tanstack/react-query"
 import { useNavigate, useLocation } from "react-router-dom"
 import { getCSLogs } from "../../service/api/api"
 import ExportLogButton from "../../components/export/ExportLogButton"
-import SidebarAdmin from "../../components/elements/SidebarAdmin"
-import ExpiredLogConfig from "../../components/elements/ExpiredLogConfig"
+import SidebarAdmin from "../../components/layout/SidebarAdmin"
+import ExpiredLogConfig from "../../components/core/ExpiredLogConfig"
 
 const CSLogs = () => {
   const navigate = useNavigate()

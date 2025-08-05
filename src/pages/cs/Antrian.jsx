@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getVisitByCategory, getAllGuests, updateVisit } from "../../service/api/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import SidebarAdmin from "../../components/elements/SidebarAdmin";
+import SidebarAdmin from "../../components/layout/SidebarAdmin";
 
 const Antrian = () => {
   const queryClient = useQueryClient();

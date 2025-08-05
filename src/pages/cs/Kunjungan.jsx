@@ -3,12 +3,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 import { fetchNextReset, calculateCountdown } from "../../utils/ResetCountVisit";
-import VisitTable from "../../components/visit/VisitTable";
+import VisitTable from "../../components/tables/VisitTable";
 import ExportVisitButton from "../../components/export/ExportVisitButton";
-import ResetQueueButton from "../../components/export/ResetQueueButton";
-import ResetDatabaseButton from "../../components/export/ResetDatabaseButton";
-import SidebarAdmin from "../../components/elements/SidebarAdmin";
-import ResetCountdown from "../../components/elements/CountdownElements";
+import ResetQueueButton from "../../components/buttons/ResetQueueButton";
+import ResetDatabaseButton from "../../components/buttons/ResetDatabaseButton";
+import SidebarAdmin from "../../components/layout/SidebarAdmin";
+import ResetCountdown from "../../components/core/CountdownElements";
 
 import "react-toastify/dist/ReactToastify.css";
 

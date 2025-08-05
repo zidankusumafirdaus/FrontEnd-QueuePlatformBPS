@@ -1,5 +1,5 @@
 import React from 'react';
-import { ErrorButton } from '../../components/elements/ErrorButton';
+import { ErrorButton } from '../../components/buttons/ErrorButton';
 
 const Error405 = () => {
   return (

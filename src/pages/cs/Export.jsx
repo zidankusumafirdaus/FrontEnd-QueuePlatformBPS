@@ -8,7 +8,7 @@ import { useNavigate, useLocation } from "react-router-dom"
 import { FaTrashAlt, FaDownload, FaCalendarAlt } from "react-icons/fa"
 import { ToastContainer, toast } from "react-toastify"
 
-import SidebarAdmin from "../../components/elements/SidebarAdmin"
+import SidebarAdmin from "../../components/layout/SidebarAdmin"
 import {
   getWeeklyExports,
   downloadWeeklyExport,

@@ -1,7 +1,7 @@
 import React from "react";
 
 // Importing from component
-import LoginForm from "../../components/login/LoginForm";
+import LoginForm from "../../components/auth/LoginForm";
 
 const LoginPage = () => {
   return (

@@ -10,7 +10,7 @@ import { getAllGuests } from "../../service/api/api";
 import { DeleteGuest } from "../../utils/DeleteGuest";
 import ConfirmModal from "../../components/guest/ConfirmModal";
 import ExportGuestButton from "../../components/export/ExportGuestButton";
-import SidebarAdmin from "../../components/elements/SidebarAdmin";
+import SidebarAdmin from "../../components/layout/SidebarAdmin";
 import FilterElements from "../../components/guest/FilterElements";
 
 const Tamu = () => {
