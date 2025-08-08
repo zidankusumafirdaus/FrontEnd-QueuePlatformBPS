@@ -1,10 +1,12 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import logo_bps from "../../assets/logo_bps.png";
 import CetakButtonAntrian from "../../components/elements/CetakButtonAntrian";
+import { getGuestById, getVisits } from "../../service/api/api.js";
 
 const QueueNumber = () => {
   const { state } = useLocation();
+  const navigate = useNavigate();
   const { guest_name, target_service, queue_number, purpose } = state || {};
 
   const now = new Date();
@@ -22,6 +24,48 @@ const QueueNumber = () => {
     purpose,
     date,
   };
+  useEffect(() => {
+    const checkVisitStatus = async () => {
+      const guestId = localStorage.getItem("last_guest_id");
+      const targetService = localStorage.getItem("last_target_service");
+
+      if (!guestId) return;
+
+      try {
+        const guestRes = await getGuestById(guestId);
+        const guest_name = guestRes.data.guest_name;
+
+        const visitsRes = await getVisits();
+        const allVisits = visitsRes.data;
+
+        const guestVisits = allVisits.filter(
+          (v) => v.guest_id === parseInt(guestId)
+        );
+        guestVisits.sort(
+          (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+        );
+
+        const thisVisit = guestVisits[0];
+
+        if (thisVisit?.mark === "hadir") {
+          navigate("/queue-konfirm", {
+            state: {
+              guest_name,
+              target_service: targetService,
+              queue_number: thisVisit.queue_number,
+              timestamp: thisVisit.timestamp,
+              purpose: thisVisit.purpose,
+            },
+            replace: true,
+          });
+        }
+      } catch (err) {
+        console.error("Gagal memeriksa status kehadiran:", err);
+      }
+    };
+
+    checkVisitStatus();
+  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-white flex flex-col lg:flex-row">

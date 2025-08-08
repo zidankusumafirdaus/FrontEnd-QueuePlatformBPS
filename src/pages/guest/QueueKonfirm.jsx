@@ -1,13 +1,11 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import logo_bps from "../../assets/logo_bps.png";
-import CetakButtonAntrian from "../../components/elements/CetakButtonAntrian";
-import { getGuestById, getVisits } from "../../service/api/api.js";
 
-const QueueNumber = () => {
+const QueueKonfirm = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { guest_name, target_service, queue_number, purpose } = state || {};
+  const { guest_name, target_service, purpose } = state || {};
 
   const now = new Date();
   const date = now.toLocaleDateString("id-ID", {
@@ -17,80 +15,37 @@ const QueueNumber = () => {
     year: "numeric",
   });
 
-  const queueData = {
-    guest_name,
-    target_service,
-    queue_number,
-    purpose,
-    date,
+  // 2. Tambahkan tombol manual untuk reset cepat
+  const handleReset = () => {
+    localStorage.removeItem("last_guest_id");
+    localStorage.removeItem("last_target_service");
+    navigate("/Form-Biodata"); // Langsung ke form
   };
-  useEffect(() => {
-    const checkVisitStatus = async () => {
-      const guestId = localStorage.getItem("last_guest_id");
-      const targetService = localStorage.getItem("last_target_service");
-
-      if (!guestId) return;
-
-      try {
-        const guestRes = await getGuestById(guestId);
-        const guest_name = guestRes.data.guest_name;
-
-        const visitsRes = await getVisits();
-        const allVisits = visitsRes.data;
-
-        const guestVisits = allVisits.filter(
-          (v) => v.guest_id === parseInt(guestId)
-        );
-        guestVisits.sort(
-          (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-        );
-
-        const thisVisit = guestVisits[0];
-
-        if (thisVisit?.mark === "hadir") {
-          navigate("/queue-konfirm", {
-            state: {
-              guest_name,
-              target_service: targetService,
-              queue_number: thisVisit.queue_number,
-              timestamp: thisVisit.timestamp,
-              purpose: thisVisit.purpose,
-            },
-            replace: true,
-          });
-        }
-      } catch (err) {
-        console.error("Gagal memeriksa status kehadiran:", err);
-      }
-    };
-
-    checkVisitStatus();
-  }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-white flex flex-col justify-center">
+    <div className="min-h-screen bg-white flex flex-col lg:flex-row">
       {/* Mobile Logo */}
-      <div className="lg:hidden bg-white flex justify-center items-center py-4 px-4">
+      <div className="lg:hidden w-full flex justify-center items-center p-4">
         <img src={logo_bps} alt="Logo BPS" className="w-48 h-auto" />
       </div>
 
       {/* Main Content */}
-      <div className="max-w-6xl flex object-center mx-auto w-full">
+      <div className="w-full max-w-6xl flex flex-col lg:flex-row mx-auto px-4">
         {/* Desktop Logo */}
-        <div className="hidden lg:flex bg-white flex-col items-center justify-center p-16">
-          <div className="mb-6">
-            <img
-              src={logo_bps}
-              alt="Logo BPS"
-              className="w-64 md:w-72 lg:w-96 xl:w-96"
-            />
-          </div>
+        <div className="hidden lg:flex w-full lg:w-1/3 bg-white items-center justify-center p-8">
+          <img
+            src={logo_bps}
+            alt="Logo BPS"
+            className="w-64 md:w-56 lg:w-72 xl:w-80"
+          />
         </div>
 
         {/* Queue Content */}
         <div className="flex-1 p-4 lg:p-8 flex flex-col justify-center">
           {/* Info Cards */}
           <div className="flex flex-col gap-3 mb-8">
+            {/* Header */}
+
             {/* Cards Container - Mobile */}
             <div className="bg-Abu rounded-xl p-4 shadow-super lg:hidden">
               <div className="flex flex-col space-y-4">
@@ -145,16 +100,21 @@ const QueueNumber = () => {
               </div>
             </div>
 
-            {/* Queue Number */}
             <div className="text-center mb-8 mt-10">
-              <h1 className="text-[#00B4D8] text-2xl font-bold mb-1">
-                NOMOR ANTRIAN
-              </h1>
-              <div className="inline-block rounded-lg p-6">
-                <span className="text-[#00B4D8] text-6xl font-bold">
-                  <p>{queue_number}</p>
-                </span>
-              </div>
+              <h2 className="text-[#00B4D8] text-2xl font-bold">
+                Terima Kasih
+              </h2>
+              <h2 className="text-[#00B4D8] text-2xl font-bold mb-4">
+                Atas Kunjungan Anda
+              </h2>
+
+              {/* Tombol Reset Manual */}
+              <button
+                onClick={handleReset}
+                className="bg-[#00B4D8] text-white px-6 py-2 rounded-lg hover:bg-[#0096C7] transition-colors"
+              >
+                Isi Form Lagi
+              </button>
             </div>
           </div>
 
@@ -169,28 +129,10 @@ const QueueNumber = () => {
               </div>
             </div>
           )}
-
-          {/* Print Button */}
-          <div className="text-center mb-6">
-            <CetakButtonAntrian
-              queueData={queueData}
-              className="max-w-xl mx-auto"
-            />
-          </div>
-
-          {/* Bottom Notice */}
-          <div className="text-center">
-            <p className="text-gray-700 font-medium mb-1 text-sm">
-              Harap menunggu Panggilan nomor antrian
-            </p>
-            <p className="text-[#00B4D8] font-bold text-sm">
-              Terima Kasih Atas Kunjungan Anda
-            </p>
-          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default QueueNumber;
+export default QueueKonfirm;
