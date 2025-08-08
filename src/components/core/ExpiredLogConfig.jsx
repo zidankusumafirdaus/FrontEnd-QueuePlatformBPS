@@ -29,35 +29,37 @@ const ExpiredLogConfig = ({ refetchKey = "cslogs" }) => {
 
   return (
     <div className="bg-white p-6 rounded-2xl shadow mb-6">
-      <h2 className="text-lg font-semibold text-[#F87171] mb-4">Konfigurasi Log Kedaluwarsa</h2>
 
-      <div className="text-center mb-4">
-        <p className="text-sm text-gray-500 mb-1">Default expiry (hari) saat ini:</p>
-        {daysLoading ? (
-          <p className="text-blue-500 animate-pulse">Memuat...</p>
-        ) : daysError ? (
-          <p className="text-red-500 text-sm">Gagal memuat data</p>
-        ) : (
-          <p className="text-4xl font-bold text-[#F87171]">{defaultDays}</p>
-        )}
-      </div>
-
-      <div className="flex items-center justify-center">
-        <label className="font-medium mr-4">Set default expiry (hari):</label>
-        <input
-          type="number"
-          min={1}
-          value={newExpiry}
-          onChange={(e) => setNewExpiry(e.target.value)}
-          className="border px-3 py-1 rounded w-24"
-        />
-        <button
-          onClick={() => updateExpiry(Number(newExpiry))}
-          disabled={!newExpiry}
-          className="ml-4 bg-[#F87171] text-white px-4 py-1 rounded"
-        >
-          Simpan
-        </button>
+      <div className="flex flex-col md:flex-row items-center justify-between w-full mb-4">
+        {/* Info Expiry */}
+        <div className="flex items-center gap-4 flex-1">
+          <p className="text-sm text-gray-600 font-medium whitespace-nowrap">Default expiry (hari) saat ini:</p>
+          {daysLoading ? (
+            <p className="text-blue-500 animate-pulse font-medium">Memuat...</p>
+          ) : daysError ? (
+            <p className="text-red-500 text-sm font-medium">Gagal memuat data</p>
+          ) : (
+            <p className="text-4xl font-bold text-[#F87171] tracking-tight">{defaultDays}</p>
+          )}
+        </div>  
+        {/* Form Set Expiry */}
+        <div className="flex items-center flex-1 justify-end w-full md:w-auto">
+          <label className="font-medium text-gray-700 mr-4 whitespace-nowrap">Set default expiry (hari):</label>
+          <input
+            type="number"
+            min={1}
+            value={newExpiry}
+            onChange={(e) => setNewExpiry(e.target.value)}
+            className="border border-gray-300 px-3 py-1 rounded w-24 text-gray-700 focus:border-[#F87171] focus:ring-1 focus:ring-[#F87171] focus:outline-none transition-all"
+          />
+          <button
+            onClick={() => updateExpiry(Number(newExpiry))}
+            disabled={!newExpiry}
+            className="ml-4 bg-[#F87171] hover:bg-[#ef4444] text-white px-4 py-1 rounded font-medium disabled:opacity-50 disabled:hover:bg-[#F87171] transition-colors"
+          >
+            Simpan
+          </button>
+        </div>
       </div>
     </div>
   )
