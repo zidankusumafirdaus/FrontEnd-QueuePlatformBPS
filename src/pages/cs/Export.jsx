@@ -5,10 +5,11 @@ import { id } from "date-fns/locale"
 import DatePicker from "react-datepicker"
 import { useEffect, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
-import { FaTrashAlt, FaDownload, FaCalendarAlt } from "react-icons/fa"
+import { FaTrashAlt, FaDownload, FaCalendarAlt, FaFileExcel } from "react-icons/fa"
 import { ToastContainer, toast } from "react-toastify"
 
 import SidebarAdmin from "../../components/layout/SidebarAdmin"
+import ConfirmModal from "../../components/guest/ConfirmModal"
 import {
   getWeeklyExports,
   downloadWeeklyExport,
@@ -25,7 +26,8 @@ const Export = () => {
   const [files, setFiles] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedDate, setSelectedDate] = useState(null)
-  const [confirmDelete, setConfirmDelete] = useState({ show: false, filename: null })
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [fileToDelete, setFileToDelete] = useState(null);
 
   const fetchWeeklyExports = async () => {
     try {
@@ -72,24 +74,25 @@ const Export = () => {
   }
 
   const confirmDeleteFile = (filename) => {
-    setConfirmDelete({ show: true, filename })
+    setFileToDelete(filename);
+    setShowConfirm(true);
   }
 
   const handleDelete = async () => {
-    const { filename } = confirmDelete
-    if (!filename) return
+    if (!fileToDelete) return;
 
     try {
-      await deleteWeeklyExport(filename)
-      const updatedFiles = files.filter((file) => file.filename !== filename)
-      setFiles(updatedFiles)
-      localStorage.setItem(CACHE_KEY, JSON.stringify({ data: updatedFiles, timestamp: Date.now() }))
-      toast.success("File berhasil dihapus.")
+      await deleteWeeklyExport(fileToDelete);
+      const updatedFiles = files.filter((file) => file.filename !== fileToDelete);
+      setFiles(updatedFiles);
+      localStorage.setItem(CACHE_KEY, JSON.stringify({ data: updatedFiles, timestamp: Date.now() }));
+      toast.success("File berhasil dihapus.");
     } catch (error) {
-      console.error("Gagal menghapus file:", error)
-      toast.error("Gagal menghapus file.")
+      console.error("Gagal menghapus file:", error);
+      toast.error("Gagal menghapus file.");
     } finally {
-      setConfirmDelete({ show: false, filename: null })
+      setShowConfirm(false);
+      setFileToDelete(null);
     }
   }
 
@@ -209,7 +212,10 @@ const Export = () => {
                             className="hover:bg-[#00AEEF]/5 transition-colors duration-200"
                           >
                             <td className="px-6 py-4 whitespace-nowrap text-sm">
-                              {file.filename}
+                              <div className="flex items-center gap-2">
+                                <FaFileExcel className="text-green-600 text-lg" />
+                                {file.filename}
+                              </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm">
                               {formatDate(file.modified)}
@@ -243,30 +249,14 @@ const Export = () => {
         </section>
       </main>
 
-      {confirmDelete.show && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Konfirmasi Hapus</h3>
-            <p className="text-gray-600 mb-6">
-              Yakin ingin menghapus file <strong>{confirmDelete.filename}</strong>?
-            </p>
-            <div className="flex justify-center gap-4">
-              <button
-                onClick={() => setConfirmDelete({ show: false, filename: null })}
-                className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
-              >
-                Batal
-              </button>
-              <button
-                onClick={handleDelete}
-                className="px-4 py-2 rounded-lg bg-[#F87171] text-white hover:bg-[#ff4444] transition"
-              >
-                Hapus
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmModal
+        show={showConfirm}
+        onClose={() => {
+          setShowConfirm(false);
+          setFileToDelete(null);
+        }}
+        onConfirm={handleDelete}
+      />
 
       <ToastContainer
         position="top-right"

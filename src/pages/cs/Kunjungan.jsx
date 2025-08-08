@@ -11,6 +11,7 @@ import SidebarAdmin from "../../components/layout/SidebarAdmin";
 import ResetCountdown from "../../components/core/CountdownElements";
 
 import "react-toastify/dist/ReactToastify.css";
+import ConfirmModal from "../../components/guest/ConfirmModal";
 
 const Kunjungan = () => {
   const navigate = useNavigate();
@@ -83,55 +84,38 @@ const Kunjungan = () => {
         </section>
 
         {/* Modal Reset Database */}
-        {showResetDatabaseModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg p-6 shadow-lg w-full max-w-md">
-              <h2 className="text-xl font-bold mb-4 text-gray-800">Konfirmasi</h2>
-              <p className="mb-6 text-gray-600">
-                Yakin ingin menghapus <strong>semua</strong> data kunjungan?
-                Tindakan ini <strong>tidak dapat dibatalkan!</strong>
-              </p>
-              <div className="flex justify-end space-x-4">
-                <button
-                  onClick={handleCloseResetDatabaseModal}
-                  className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded"
-                >
-                  Batal
-                </button>
-                <ResetDatabaseButton
-                  onClick={handleCloseResetDatabaseModal}
-                  className="px-4 py-2"
-                  confirm
-                />
-              </div>
-            </div>
-          </div>
-        )}
+        <ConfirmModal
+          show={showResetDatabaseModal}
+          onClose={handleCloseResetDatabaseModal}
+          onConfirm={() => {
+            const resetDatabaseBtn = document.querySelector('[data-reset-database-btn]');
+            if (resetDatabaseBtn) {
+              resetDatabaseBtn.click();
+            }
+            handleCloseResetDatabaseModal();
+          }}
+          message={<>
+            Yakin ingin menghapus semua data kunjungan dari{' '}
+            <span className="text-red-500 font-bold">Database</span>?{' '}
+            Tindakan ini tidak dapat dibatalkan!
+          </>}
+          modalTitle="Konfirmasi"
+        />
 
         {/* Modal Reset Queue */}
-        {showResetQueueModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg p-6 shadow-lg w-full max-w-md">
-              <h2 className="text-xl font-bold mb-4 text-gray-800">Konfirmasi</h2>
-              <p className="mb-6 text-gray-600">
-                Yakin ingin mereset nomor antrian saat ini?
-              </p>
-              <div className="flex justify-end space-x-4">
-                <button
-                  onClick={handleCloseResetQueueModal}
-                  className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded"
-                >
-                  Batal
-                </button>
-                <ResetQueueButton
-                  onClick={handleCloseResetQueueModal}
-                  className="px-4 py-2"
-                  confirm
-                />
-              </div>
-            </div>
-          </div>
-        )}
+        <ConfirmModal
+          show={showResetQueueModal}
+          onClose={handleCloseResetQueueModal}
+          onConfirm={() => {
+            const resetQueueBtn = document.querySelector('[data-reset-queue-btn]');
+            if (resetQueueBtn) {
+              resetQueueBtn.click();
+            }
+            handleCloseResetQueueModal();
+          }}
+          message="Yakin ingin mereset nomor antrian saat ini?"
+          modalTitle="Konfirmasi"
+        />
       </main>
     </div>
   );
