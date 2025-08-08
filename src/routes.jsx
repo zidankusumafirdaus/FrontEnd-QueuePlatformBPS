@@ -16,6 +16,7 @@ import HomePage from "./pages/home/HomePage";
 import QueueKunjunganDinas from './pages/guest/QueueKunjunganDinas';
 import Export from './pages/cs/Export';
 import Antrian from './pages/cs/Antrian';
+import QueueKonfirm from './pages/guest/QueueKonfirm';
 
 // Error pages
 import ErrorHandlers from './utils/ErrorHandlers';
@@ -38,6 +39,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="/Form-Biodata" element={<GuestPage />} />
             <Route path="/Nomor-Antrian" element={<QueueNumber />} />
             <Route path="/queue-kunjungan-dinas" element={<QueueKunjunganDinas />} />
+            <Route path="/queue-konfirm" element={<QueueKonfirm />} />
 
             {/* Customer Service */}
             <Route path="/login-BukuTamu" element={<LoginPage />} />

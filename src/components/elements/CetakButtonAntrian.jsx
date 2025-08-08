@@ -33,7 +33,9 @@ const CetakButtonAntrian = ({ queueData, className = "" }) => {
 
       const opt = {
         margin: 5,
-        filename: `tiket-antrian-${queueData?.queue_number || 'xxx'}-${Date.now()}.pdf`,
+        filename: `tiket-antrian-${
+          queueData?.queue_number || "xxx"
+        }-${Date.now()}.pdf`,
         image: { type: "jpeg", quality: 0.98 },
         html2canvas: {
           scale: 2,
@@ -64,18 +66,18 @@ const CetakButtonAntrian = ({ queueData, className = "" }) => {
   };
 
   return (
-    <div className="flex flex-col items-start gap-2">
+    <div className={`w-full flex flex-col gap-2 ${className}`}>
       <select
         value={format}
         onChange={(e) => setFormat(e.target.value)}
-        className="mb-2 px-3 py-1 rounded border border-gray-300"
+        className="w-full px-3 py-2 rounded border border-gray-300"
       >
         <option value="a4">Ukuran A4</option>
         <option value="struk">Struk Kecil (80x150 mm)</option>
       </select>
       <button
         onClick={handlePrint}
-        className={`inline-flex justify-center items-center px-6 py-3 bg-[#00B4D8] hover:bg-[#0096c7] text-white rounded-lg transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 ${className}`}
+        className="w-full inline-flex justify-center items-center px-6 py-3 bg-[#00B4D8] hover:bg-[#0096c7] text-white rounded-lg transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
       >
         <FaPrint className="mr-2" />
         Cetak Tiket
