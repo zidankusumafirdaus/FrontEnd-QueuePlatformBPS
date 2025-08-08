@@ -24,6 +24,14 @@ const QueueNumber = () => {
     purpose,
     date,
   };
+
+  useEffect(() => {
+    if (!state || !guest_name || !queue_number || !target_service) {
+      navigate("/", { replace: true });
+      return;
+    }
+  }, [state, guest_name, queue_number, target_service, navigate]);
+
   useEffect(() => {
     const checkVisitStatus = async () => {
       const guestId = localStorage.getItem("last_guest_id");

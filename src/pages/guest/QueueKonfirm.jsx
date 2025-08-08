@@ -15,6 +15,13 @@ const QueueKonfirm = () => {
     year: "numeric",
   });
 
+  useEffect(() => {
+    if (!state || !guest_name || !target_service) {
+      navigate("/", { replace: true });
+      return;
+    }
+  }, [state, guest_name, target_service, navigate]);
+
   // 2. Tambahkan tombol manual untuk reset cepat
   const handleReset = () => {
     localStorage.removeItem("last_guest_id");
