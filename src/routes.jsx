@@ -18,6 +18,9 @@ import Export from './pages/cs/Export';
 import Antrian from './pages/cs/Antrian';
 import QueueKonfirm from './pages/guest/QueueKonfirm';
 
+//Anomali
+import LandingPage from './pages/DontTouchIT/LandingPage';
+
 // Error pages
 import ErrorHandlers from './utils/ErrorHandlers';
 import NotFound from './pages/error/404';
@@ -54,6 +57,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="/403" element={<Error403 />} />
             <Route path="/405" element={<Error405 />} />
             <Route path="/500" element={<Error500 />} />
+
+            {/* Anomali */}
+            <Route path="/developers" element={<LandingPage />} />
           </Routes>
         </Router>
       </QueryClientProvider>

@@ -16,6 +16,15 @@ export default {
         poppins: ['Poppins', 'sans-serif'],
       },
       colors: {
+        'primary-blue': '#1E3A8A', // Deep blue
+        'electric-blue': '#00AEEF', // Bright/electric blue
+        'cyber-cyan': '#7DD3FC', // Light cyan
+        'pearl-white': '#F8FAFC', // Off-white
+        'navy-900': '#1E3A8A',
+        'navy-800': '#1E40AF',
+        'navy-700': '#1D4ED8',
+        'navy-600': '#2563EB',
+        'navy-500': '#3B82F6',
         BiruTerang: "#00AEEF",
         AbuAbu: "#F5F5F5",
         Cyan: "#C4EFFF",
