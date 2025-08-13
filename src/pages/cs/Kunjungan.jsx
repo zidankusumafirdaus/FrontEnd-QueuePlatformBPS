@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import "react-toastify/dist/ReactToastify.css";
 
 import { fetchNextReset, calculateCountdown } from "../../utils/ResetCountVisit";
 import VisitTable from "../../components/tables/VisitTable";
-import ExportVisitButton from "../../components/export/ExportVisitButton";
-import ResetQueueButton from "../../components/buttons/ResetQueueButton";
-import ResetDatabaseButton from "../../components/buttons/ResetDatabaseButton";
 import SidebarAdmin from "../../components/layout/SidebarAdmin";
-import ResetCountdown from "../../components/core/CountdownElements";
-
-import "react-toastify/dist/ReactToastify.css";
-import ConfirmModal from "../../components/guest/ConfirmModal";
+import VisitHeaderSection from "../../components/layout/VisitHeaderSection";
+import ResetDatabaseModal from "../../components/modals/ResetDatabaseModal";
+import ResetQueueModal from "../../components/modals/ResetQueueModal";
 
 const Kunjungan = () => {
   const navigate = useNavigate();
@@ -59,63 +56,27 @@ const Kunjungan = () => {
 
       {/* Main Content */}
       <main className="flex-1 overflow-auto p-8">
-        <section className="bg-white p-6 rounded-lg shadow-md mb-8">
-          <div className="flex justify-between w-full">
-            <h1 className="text-4xl font-bold mb-6 text-[#00AEEF]">Data Kunjungan</h1>
-            {loadingReset ? (
-              <p className="text-gray-500 self-center">Memuat waktu reset...</p>
-            ) : (
-              <ResetCountdown nextReset={nextReset} countdown={countdown} />
-            )}
-          </div>
+        <VisitHeaderSection
+          loadingReset={loadingReset}
+          nextReset={nextReset}
+          countdown={countdown}
+          setShowResetQueueModal={setShowResetQueueModal}
+          setShowResetDatabaseModal={setShowResetDatabaseModal}
+        />
 
-          <div className="flex space-x-4 justify-between w-full">
-            <div className="flex space-x-4">
-              <ResetQueueButton onClick={() => setShowResetQueueModal(true)} />
-              <ExportVisitButton />
-            </div>
-            <ResetDatabaseButton onClick={() => setShowResetDatabaseModal(true)} />
-          </div>
-        </section>
-
-        {/* Visit Table */}
-        <section className="">
-          <VisitTable />
-        </section>
-
-        {/* Modal Reset Database */}
-        <ConfirmModal
+        <ResetDatabaseModal
           show={showResetDatabaseModal}
           onClose={handleCloseResetDatabaseModal}
-          onConfirm={() => {
-            const resetDatabaseBtn = document.querySelector('[data-reset-database-btn]');
-            if (resetDatabaseBtn) {
-              resetDatabaseBtn.click();
-            }
-            handleCloseResetDatabaseModal();
-          }}
-          message={<>
-            Yakin ingin menghapus semua data kunjungan dari{' '}
-            <span className="text-red-500 font-bold">Database</span>?{' '}
-            Tindakan ini tidak dapat dibatalkan!
-          </>}
-          modalTitle="Konfirmasi"
         />
 
-        {/* Modal Reset Queue */}
-        <ConfirmModal
+        <ResetQueueModal
           show={showResetQueueModal}
           onClose={handleCloseResetQueueModal}
-          onConfirm={() => {
-            const resetQueueBtn = document.querySelector('[data-reset-queue-btn]');
-            if (resetQueueBtn) {
-              resetQueueBtn.click();
-            }
-            handleCloseResetQueueModal();
-          }}
-          message="Yakin ingin mereset nomor antrian saat ini?"
-          modalTitle="Konfirmasi"
         />
+
+        <section>
+          <VisitTable />
+        </section>
       </main>
     </div>
   );
