@@ -5,7 +5,15 @@ import logo_bps from "../../assets/logo_bps.png";
 const QueueKonfirm = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { guest_name, target_service, purpose } = state || {};
+
+  // 1. Tambahkan fallback dari localStorage jika state tidak ada
+  const savedData = JSON.parse(localStorage.getItem("temp_guest_data") || "{}");
+  const {
+    guest_name = savedData.guest_name,
+    target_service = savedData.target_service,
+    purpose = savedData.purpose,
+    queue_number = savedData.queue_number,
+  } = state || {};
 
   const now = new Date();
   const date = now.toLocaleDateString("id-ID", {
@@ -16,17 +24,33 @@ const QueueKonfirm = () => {
   });
 
   useEffect(() => {
-    if (!state || !guest_name || !target_service) {
+    // 2. Logika pengecekan yang lebih robust
+    const guestId = localStorage.getItem("last_guest_id");
+
+    // Cek jika ada data yang valid (baik dari state atau localStorage)
+    const hasValidData = (guest_name && target_service) || guestId;
+
+    if (!hasValidData) {
       navigate("/", { replace: true });
       return;
     }
+
+    // 3. Jika ada guestId tapi tidak ada state, coba dapatkan data terbaru
+    if (guestId && !state) {
+      // Anda bisa menambahkan logika fetch data terbaru di sini
+      // atau cukup biarkan menggunakan data dari localStorage
+    }
   }, [state, guest_name, target_service, navigate]);
 
-  // 2. Tambahkan tombol manual untuk reset cepat
+  // 4. Tombol reset dengan cleanup lebih lengkap
   const handleReset = () => {
+    // Hapus semua data terkait antrian
     localStorage.removeItem("last_guest_id");
     localStorage.removeItem("last_target_service");
-    navigate("/Form-Biodata"); // Langsung ke form
+    localStorage.removeItem("temp_guest_data");
+    localStorage.removeItem("queue_data");
+
+    navigate("/Form-Biodata", { replace: true });
   };
 
   return (
