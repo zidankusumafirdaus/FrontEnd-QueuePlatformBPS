@@ -26,10 +26,34 @@ const QueueNumber = () => {
   };
 
   useEffect(() => {
-    if (!state || !guest_name || !queue_number || !target_service) {
-      navigate("/", { replace: true });
+    // Cek apakah ada data yang valid dari state navigasi
+    const hasValidState = state && guest_name && queue_number && target_service;
+
+    // Cek data di localStorage
+    const guestId = localStorage.getItem("last_guest_id");
+    const targetService = localStorage.getItem("last_target_service");
+    const savedQueueData = localStorage.getItem("queue_data");
+
+    // Jika ada state yang valid, simpan ke localStorage
+    if (hasValidState) {
+      localStorage.setItem("queue_data", JSON.stringify(state));
       return;
     }
+
+    // Jika tidak ada state tapi ada data tersimpan, gunakan data tersebut
+    if (savedQueueData) {
+      const parsedData = JSON.parse(savedQueueData);
+      if (parsedData.guest_name && parsedData.queue_number) {
+        // Biarkan komponen render dengan data yang ada
+        return;
+      }
+    }
+
+    // Jika ada guestId, biarkan checkVisitStatus bekerja
+    if (guestId) return;
+
+    // Jika tidak ada data sama sekali, redirect ke home
+    navigate("/", { replace: true });
   }, [state, guest_name, queue_number, target_service, navigate]);
 
   useEffect(() => {
