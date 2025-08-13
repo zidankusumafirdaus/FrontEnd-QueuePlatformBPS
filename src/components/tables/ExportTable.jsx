@@ -1,23 +1,29 @@
 import { FaTrashAlt, FaDownload, FaFileExcel } from "react-icons/fa";
 import { format } from "date-fns";
 
-const ExportTable = ({ files, loading, selectedDate, handleDownload, confirmDeleteFile }) => {
-  
+const ExportTable = ({
+  files,
+  loading,
+  selectedDate,
+  handleDownload,
+  confirmDeleteFile
+}) => {
   const formatDate = (timestamp) =>
     new Date(timestamp * 1000).toLocaleString("id-ID");
 
-  const getDateOnly = (timestamp) =>
-    new Date(timestamp * 1000).toLocaleDateString("id-ID", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-
   const groupByDate = (files) => {
     return files.reduce((acc, file) => {
-      const date = getDateOnly(file.modified);
-      if (!acc[date]) acc[date] = [];
-      acc[date].push(file);
+      const dateKey = format(new Date(file.modified * 1000), "yyyy-MM-dd");
+      if (!acc[dateKey])
+        acc[dateKey] = {
+          display: new Date(file.modified * 1000).toLocaleDateString("id-ID", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }),
+          files: [],
+        };
+      acc[dateKey].files.push(file);
       return acc;
     }, {});
   };
@@ -30,10 +36,9 @@ const ExportTable = ({ files, loading, selectedDate, handleDownload, confirmDele
     selectedDate === null
       ? groupedFiles
       : Object.fromEntries(
-          Object.entries(groupedFiles).filter(([key]) => {
-            const fileDate = new Date(key);
-            return isSameDate(fileDate, selectedDate);
-          })
+          Object.entries(groupedFiles).filter(([dateKey]) =>
+            isSameDate(new Date(dateKey), selectedDate)
+          )
         );
 
   return (
@@ -53,10 +58,10 @@ const ExportTable = ({ files, loading, selectedDate, handleDownload, confirmDele
       ) : (
         Object.entries(filteredGroupedFiles)
           .sort((a, b) => new Date(b[0]) - new Date(a[0]))
-          .map(([date, filesOnDate]) => (
-            <div key={date} className="mb-10 last:mb-0">
+          .map(([dateKey, group]) => (
+            <div key={dateKey} className="mb-10 last:mb-0">
               <h2 className="text-2xl font-bold text-[#8DC63F] mb-6 border-b-2 border-[#8DC63F]/20 pb-2">
-                {date}
+                {group.display}
               </h2>
               <div className="overflow-x-auto rounded-lg">
                 <table className="min-w-full divide-y divide-gray-200 font-poppins text-sm">
@@ -74,7 +79,7 @@ const ExportTable = ({ files, loading, selectedDate, handleDownload, confirmDele
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-100 text-[#222]">
-                    {filesOnDate.map((file, index) => (
+                    {group.files.map((file, index) => (
                       <tr
                         key={index}
                         className="hover:bg-[#00AEEF]/5 transition-colors duration-200"

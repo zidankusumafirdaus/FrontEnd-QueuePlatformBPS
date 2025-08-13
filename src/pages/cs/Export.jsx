@@ -107,7 +107,6 @@ const Export = () => {
   return (
     <div className="flex h-screen bg-[#F5F8FA] font-poppins">
       <SidebarAdmin />
-
       <main className="flex-1 overflow-auto p-8 font-poppins">
         <h1 className="text-4xl font-bold mb-8 text-[#00AEEF] drop-shadow-sm">
           Export Mingguan Otomatis
@@ -115,7 +114,7 @@ const Export = () => {
 
         <DateFilter
           selectedDate={selectedDate}
-          onChange={setSelectedDate}
+          setSelectedDate={setSelectedDate}
         />
 
         <ExportTable
@@ -136,18 +135,7 @@ const Export = () => {
         onConfirm={handleDelete}
       />
 
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 };
