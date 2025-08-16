@@ -1,8 +1,9 @@
 import axios from "axios";
 
-// Buat instance axios
+const baseURL = import.meta.env.VITE_BACKEND_URL;;
+
 const API = axios.create({
-  baseURL: "/api",
+  baseURL: baseURL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -56,9 +57,35 @@ export const setDefaultLogExpiry = (days) => API.post("/cs/expiredLogs", { days 
 export const getDefaultLogExpiry = () => API.get("/cs/get-expired-logs").then((res) => res.data.days)
 
 // API untuk Export
-export const exportGuests = () => API.get("/export/guest", { responseType: "blob" });
-export const exportVisits = () => API.get("/export/visit", { responseType: "blob" });
-export const exportLogs = () => API.get("/export/logs", { responseType: "blob" });
+export const exportGuests = () => {
+  const token = localStorage.getItem("token");
+  return API.get("/export/guest", {
+    responseType: "blob",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const exportVisits = () => {
+  const token = localStorage.getItem("token");
+  return API.get("/export/visit", {
+    responseType: "blob",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const exportLogs = () => {
+  const token = localStorage.getItem("token");
+  return API.get("/export/logs", {
+    responseType: "blob",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
 
 // Export API for Weekly Auto Exports
 export const getWeeklyExports = () => {

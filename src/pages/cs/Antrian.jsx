@@ -35,7 +35,7 @@ const Antrian = () => {
 
   const guestMap = useMemo(() => {
     const map = {};
-    guests.forEach((g) => {
+    (Array.isArray(guests) ? guests : []).forEach((g) => {
       map[g.guest_id] = g.guest_name;
     });
     return map;

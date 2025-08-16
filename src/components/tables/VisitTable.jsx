@@ -68,7 +68,7 @@ const VisitTable = () => {
 
   const guestMap = useMemo(() => {
     const map = {};
-    guestData.forEach((g) => {
+    (Array.isArray(guestData) ? guestData : []).forEach((g) => {
       map[g.guest_id] = g.guest_name;
     });
     return map;
